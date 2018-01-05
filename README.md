@@ -1,4 +1,4 @@
-Dieses Projekt ist ein Softwareprojekt, welches im Zuge des Informatik-Leistungskurses (LK118) entsteht.
+Dieses Projekt ist ein Softwareprojekt, welches im Zuge des Informatik-Leistungskurses (L118) entsteht.
 
 Es handelt sich um ein einfaches Jump'n'run Spiel mit Multiplayermodus.
 
