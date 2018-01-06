@@ -14,10 +14,21 @@ public interface IConfig {
 	/*
 		Loads {@link IStorageObject}'s of specified files into RAM which increases speed but junks the RAM at high amount
 
-		@param file             the file that should be converted to the StorageObject
+		@param  file            the file that should be converted to the StorageObject
 		@return IStorageObject  the StorageObject that was loaded from the file
 	*/
 	IStorageObject loadInRAM(File file);
+
+	/*
+		Removes a {@link IStorageObject}'s from the RAM and stores it into the file
+
+		@param  file            the file that should be removed from the ram
+		@return boolean         true if the operation was successful
+								false if the file is not loaded in RAM
+								or an IOException was thrown
+	*/
+	boolean removeFromRAM(File file);
+
 	/*
 
 		Since objects in RAM don't update it is necessary to save them (at least on shutdown)
