@@ -1,17 +1,25 @@
 package de.L118.game;
 
-import java.util.LinkedList;
-import java.util.List;
+import graphics.Texture;
+import graphics.renderer.Renderer;
 
 public class World {
 	
-	List<Blocks> blocks;
+	Blocks[][] blocks;
+	float xPos;
 	
 	public World() {
-		blocks = new LinkedList<Blocks>();
+		blocks = new Blocks[10][10];
+		xPos = 0;
+
+		for(int i = 0; i < blocks.length; i++) {
+			for(int j = 0; j < blocks[0].length; j++) {
+				blocks[i][j] = new Blocks(i,j,100,100);
+			}
+		}
 	}
 	
-	boolean isObjekt(int x, int y) {
+	public boolean isObject(int x, int y) {
 		//TODO
 		return false;
 	}
@@ -20,15 +28,23 @@ public class World {
 		//TODO
 	}
 	
-	void moveRight(int distance) {
+	public void moveRight(int distance) {
 		//TODO
 	}
 	
-	void loadWorld() {
+	public void loadWorld() {
 		//TODO
 	}
 	
-	void update() {
-		//TODO
+	public void update() {
+		
+	}
+	
+	public void render() {
+		for(int i = 0; i < blocks.length; i++) {
+			for(int j = 0; j < blocks[0].length; j++) {
+				blocks[i][j].draw(xPos);
+			}
+		}
 	}
 }

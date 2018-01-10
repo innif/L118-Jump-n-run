@@ -12,7 +12,7 @@ import graphics.renderer.Renderer;
  *
  *	Die Game-Klasse
  *	Hauptklasse des Spiels.
- *	Game-loop, update- und render-methode in dieser klasse
+ *	Game-loop, update- and render-methode in dieser klasse
  */
 public class Game {
 
@@ -61,7 +61,7 @@ public class Game {
 	 */
 	private void render()
 	{
-		Renderer.drawSprite(0, 0, 100, 100, texture, null);
+		w.render();
 	}
 	
 	/**
