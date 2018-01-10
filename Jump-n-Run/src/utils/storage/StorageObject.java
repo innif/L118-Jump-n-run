@@ -7,7 +7,7 @@ package utils.storage;
 
  */
 
-public interface IStorageObject {
+public class StorageObject {
 
 	/*
 		Sets or creates an entry to/for the StorageObject.
@@ -16,7 +16,9 @@ public interface IStorageObject {
 		@param object   the object that should be stored
 
 	 */
-	void setValue(String key, Object value);
+	public void setValue(String key, Object value){
+	
+	}
 
 	/*
 		Gets the value of a specified key. Returns the value as object.
@@ -24,6 +26,8 @@ public interface IStorageObject {
 		@param key      the key of the entry that should be get
 		@return         the object related to the given key
 	 */
-	Object getValue(String key);
+	public Object getValue(String key){
+		return null;
+	}
 
 }

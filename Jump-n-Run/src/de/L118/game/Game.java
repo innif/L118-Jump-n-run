@@ -19,9 +19,13 @@ public class Game {
 	private boolean running;
 	private Texture texture;
 	
+	Player p;
+	World w;
+	
 	public Game()
 	{
-		
+		w = new World();
+		p = new Player(w);
 	}
 	
 	/**
