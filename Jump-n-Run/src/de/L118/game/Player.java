@@ -23,13 +23,13 @@ public class Player {
 	}
 	
 	public void jump() {
-		if(w.blockAt((int)posX, (int)(posY)).isBlock()) {
+		if(w.blockAt(Math.round(posX), (int)(posY)).isBlock()) {
 			fallSpeed = (float) -0.1;
 		}
 	}
 	
 	public void update() {
-		if(w.blockAt((int)posX, (int)(posY)).isBlock() && fallSpeed >= 0) {
+		if(w.blockAt((int)posX, (int)(posY )).isBlock() && fallSpeed >= 0) {
 			fallSpeed = 0;
 		}else {
 			fallSpeed += 0.001;

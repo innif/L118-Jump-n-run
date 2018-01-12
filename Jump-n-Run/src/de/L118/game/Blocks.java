@@ -41,7 +41,7 @@ public class Blocks {
 	}
 	
 	public void draw(float xPos) {
-		Renderer.drawSprite(x*sizeX-xPos, y*sizeY, sizeX, sizeY, texture, null);
+		Renderer.drawSprite((x-xPos)*sizeX, y*sizeY, sizeX, sizeY, texture, null);
 	}
 	
 	public boolean isBlock() {
