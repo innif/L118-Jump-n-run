@@ -1,16 +1,13 @@
 package de.L118.game;
 
-import graphics.Texture;
-import graphics.renderer.Renderer;
-
 public class World {
 	
 	Blocks[][] blocks;
 	float xPos;
 	
 	public World() {
-		blocks = new Blocks[10][10];
-		xPos = 0;
+		blocks = new Blocks[25][1];
+		xPos = (float) 0;
 
 		for(int i = 0; i < blocks.length; i++) {
 			for(int j = 0; j < blocks[0].length; j++) {
@@ -24,12 +21,20 @@ public class World {
 		return false;
 	}
 	
-	void moveLeft(int distance) {
-		//TODO
+	void moveLeft(double distance) {
+		xPos -= distance;
 	}
 	
-	public void moveRight(int distance) {
-		//TODO
+	public void moveRight(double d) {
+		xPos += d;
+	}
+	
+	public void setxPos(float xPos) {
+		this.xPos = xPos;
+	}
+	
+	public float getxPos() {
+		return xPos;
 	}
 	
 	public void loadWorld() {
@@ -45,6 +50,14 @@ public class World {
 			for(int j = 0; j < blocks[0].length; j++) {
 				blocks[i][j].draw(xPos);
 			}
+		}
+	}
+	
+	public Blocks blockAt(int x, int y) {
+		if(x>= blocks.length || y>= blocks[0].length || x<0 || y<0) {
+			return new Blocks();
+		}else {
+			return blocks[x][y];
 		}
 	}
 }

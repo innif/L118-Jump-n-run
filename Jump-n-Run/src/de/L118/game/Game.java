@@ -1,9 +1,6 @@
 package de.L118.game;
 
-import java.awt.Color;
-
 import graphics.Graphics;
-import graphics.Texture;
 import graphics.renderer.Renderer;
 
 /**
@@ -17,15 +14,15 @@ import graphics.renderer.Renderer;
 public class Game {
 
 	private boolean running;
-	private Texture texture;
 	
 	Player p;
 	World w;
 	
+	long timer;
+	
 	public Game()
 	{
-		w = new World();
-		p = new Player(w);
+		
 	}
 	
 	/**
@@ -34,7 +31,8 @@ public class Game {
 	private void init()
 	{
 		Renderer.init();
-		texture = new Texture("res/textures/test.png");
+		w = new World();
+		p = new Player(w);
 	}
 	
 	/**
@@ -51,7 +49,9 @@ public class Game {
 	 */
 	private void update()
 	{
-		
+		p.update();
+		p.jump();
+		p.moveRight(0.2);
 	}
 	
 	/**
@@ -62,6 +62,7 @@ public class Game {
 	private void render()
 	{
 		w.render();
+		p.draw();
 	}
 	
 	/**
@@ -103,6 +104,13 @@ public class Game {
 			
 			Graphics.updateWindow();
 			running = Graphics.windowOpen();
+			
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		cleanUp();
 	}
