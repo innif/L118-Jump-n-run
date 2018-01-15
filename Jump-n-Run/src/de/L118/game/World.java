@@ -4,14 +4,20 @@ public class World {
 	
 	Blocks[][] blocks;
 	float xPos;
+	short[][] types = {
+			{0,0,0,1,1},	
+			{0,0,1,1,0},	
+			{0,1,1,0,0},	
+			{1,1,1,1,1}
+	};
 	
 	public World() {
-		blocks = new Blocks[25][1];
+		blocks = new Blocks[types[0].length][types.length];
 		xPos = (float) 0;
 
 		for(int i = 0; i < blocks.length; i++) {
 			for(int j = 0; j < blocks[0].length; j++) {
-				blocks[i][j] = new Blocks(i,j,100,100);
+				blocks[i][j] = new Blocks(i,j,100,100, types[types.length-(j+1)][i]);
 			}
 		}
 	}

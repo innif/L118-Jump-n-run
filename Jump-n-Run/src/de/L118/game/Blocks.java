@@ -9,15 +9,15 @@ public class Blocks {
 	int sizeX;
 	int sizeY;
 	private Texture texture;
-	byte type;
+	short type;
 	
-	public Blocks(int x,int y,int sizeX,int sizeY) {
+	public Blocks(int x,int y,int sizeX,int sizeY,short type) {
 		texture = new Texture("res/textures/middle_block.png");
 		this.x = x;
 		this.y = y;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
-		type = 1;
+		this.type = type;
 	}
 	
 	public Blocks() {
@@ -41,7 +41,9 @@ public class Blocks {
 	}
 	
 	public void draw(float xPos) {
-		Renderer.drawSprite((x-xPos)*sizeX, y*sizeY, sizeX, sizeY, texture, null);
+		if(type != 0) {
+			Renderer.drawSprite((x-xPos)*sizeX, y*sizeY, sizeX, sizeY, texture, null);
+		}
 	}
 	
 	public boolean isBlock() {
