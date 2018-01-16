@@ -4,12 +4,12 @@ import graphics.Texture;
 import graphics.renderer.Renderer;
 
 public class Blocks {
-	int x;
-	int y;
-	int sizeX;
-	int sizeY;
+	private int x;
+	private int y;
+	private int sizeX;
+	private int sizeY;
 	private Texture texture;
-	short type;
+	private short type;
 	
 	public Blocks(int x,int y,int sizeX,int sizeY,short type) {
 		texture = new Texture("res/textures/middle_block.png");

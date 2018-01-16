@@ -2,22 +2,22 @@ package de.L118.game;
 
 public class World {
 	
-	Blocks[][] blocks;
-	float xPos;
-	short[][] types = {
-			{0,0,0,1,1},	
-			{0,0,1,1,0},	
-			{0,1,1,0,0},	
-			{1,1,1,1,1}
+	private Blocks[][][] blocks; // [ebene][x][y]
+	private float xPos;
+	private short[][] types = {
+			{0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},	
+			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},	
+			{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,0,1}
 	};
 	
 	public World() {
-		blocks = new Blocks[types[0].length][types.length];
+		blocks = new Blocks[1][types[0].length][types.length];
 		xPos = (float) 0;
 
 		for(int i = 0; i < blocks.length; i++) {
 			for(int j = 0; j < blocks[0].length; j++) {
-				blocks[i][j] = new Blocks(i,j,100,100, types[types.length-(j+1)][i]);
+				blocks[0][i][j] = new Blocks(i,j,100,100, types[types.length-(j+1)][i]);
 			}
 		}
 	}
@@ -54,7 +54,7 @@ public class World {
 	public void render() {
 		for(int i = 0; i < blocks.length; i++) {
 			for(int j = 0; j < blocks[0].length; j++) {
-				blocks[i][j].draw(xPos);
+				blocks[0][i][j].draw(xPos - Player.DISPLAY_POS);
 			}
 		}
 	}
@@ -63,7 +63,7 @@ public class World {
 		if(x>= blocks.length || y>= blocks[0].length || x<0 || y<0) {
 			return new Blocks();
 		}else {
-			return blocks[x][y];
+			return blocks[0][x][y];
 		}
 	}
 }
