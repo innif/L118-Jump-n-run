@@ -51,7 +51,7 @@ public class Game {
 	{
 		p.update();
 		p.jump();
-		p.moveRight(0.01);
+		p.moveRight(0.1);
 	}
 	
 	/**
@@ -95,22 +95,38 @@ public class Game {
 	{
 		Graphics.createWindow(1270, 720, "Jump n Run", false);
 		init();
+		
+		long lastTime = System.nanoTime();
+		long timer = System.currentTimeMillis();
+		final double ns = 1000000000.0 / 60.0;
+		double delta = 0;
+		int fps = 0;
+		int ups = 0;
+		
 		while (running)
 		{
-			update();
-			
+			long now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+			while (delta >= 1) 
+			{
+				update();
+				ups++;
+				delta--;
+			}
 			Graphics.clearWindow();
+			
 			render();
+			fps++;
 			
 			Graphics.updateWindow();
-			running = Graphics.windowOpen();
-			
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (System.currentTimeMillis() - timer > 1000)
+			{
+				timer += 1000;
+				System.out.println("FPS: " + fps + " UPS: " + ups);
+				ups = fps = 0;
 			}
+			running = Graphics.windowOpen();
 		}
 		cleanUp();
 	}
