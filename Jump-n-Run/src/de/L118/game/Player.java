@@ -19,8 +19,8 @@ public class Player {
 		texture = new Texture("res/textures/test.png");
 		posX = 0;
 		posY = 6;
-		sizeX = 100;
-		sizeY = 100;
+		sizeX = World.TILESIZE;
+		sizeY = World.TILESIZE;
 		fallSpeed = 0;
 	}
 	

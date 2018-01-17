@@ -11,12 +11,14 @@ public class Blocks {
 	private Texture texture;
 	private short type;
 	
-	public Blocks(int x,int y,int sizeX,int sizeY,short type) {
-		texture = new Texture("res/textures/middle_block.png");
+	public Blocks(int x, int y, short type) {
+		if(type!= 0) {
+			texture = new Texture("res/textures/Block_"+type+".png");
+		}
 		this.x = x;
 		this.y = y;
-		this.sizeX = sizeX;
-		this.sizeY = sizeY;
+		this.sizeX = World.TILESIZE;
+		this.sizeY = World.TILESIZE;
 		this.type = type;
 	}
 	
@@ -48,5 +50,9 @@ public class Blocks {
 	
 	public boolean isBlock() {
 		return type != 0;
+	}
+	
+	public short getType() {
+		return type;
 	}
 }
