@@ -2,22 +2,23 @@ package de.L118.game;
 
 import graphics.Texture;
 import graphics.renderer.Renderer;
+import utils.storage.map.Tileset;
 
 public class Blocks {
-	int x;
-	int y;
-	int sizeX;
-	int sizeY;
-	private Texture texture;
-	byte type;
+	private int     x;
+	private int     y;
+	private int     sizeX;
+	private int     sizeY;
+	private Tileset tileset;
+	private short   type;
 	
-	public Blocks(int x,int y,int sizeX,int sizeY) {
-		texture = new Texture("res/textures/middle_block.png");
+	public Blocks(int x, int y, short type, Tileset tileset) {
+		this.tileset = tileset;
 		this.x = x;
 		this.y = y;
-		this.sizeX = sizeX;
-		this.sizeY = sizeY;
-		type = 1;
+		this.sizeX = World.TILESIZE;
+		this.sizeY = World.TILESIZE;
+		this.type = type;
 	}
 	
 	public Blocks() {
@@ -41,10 +42,19 @@ public class Blocks {
 	}
 	
 	public void draw(float xPos) {
-		Renderer.drawSprite((x-xPos)*sizeX, y*sizeY, sizeX, sizeY, texture, null);
+		if(type != 0) {
+			//TODO: Methode von Luca benutzen
+			//Graphics.drawBlock(x,y,width,height,tileset,id);
+			
+			//Renderer.drawSprite((x-xPos)*sizeX, y*sizeY, sizeX, sizeY, texture, null);
+		}
 	}
 	
 	public boolean isBlock() {
 		return type != 0;
+	}
+	
+	public short getType() {
+		return type;
 	}
 }
