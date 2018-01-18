@@ -18,7 +18,7 @@ public class World {
 
 		for(int i = 0; i < blocks[0].length; i++) {
 			for(int j = 0; j < blocks[0][0].length; j++) {
-				blocks[0][i][j] = new Blocks(i,j, types[types.length-(j+1)][i]);
+				//blocks[0][i][j] = new Blocks(i,j, types[types.length-(j+1)][i]);
 			}
 		}
 	}
@@ -53,11 +53,13 @@ public class World {
 	}
 	
 	public void render() {
+		//TODO: Graphics begin render world (Graphics.beginWorld())
 		for(int i = 0; i < blocks[0].length; i++) {
 			for(int j = 0; j < blocks[0][0].length; j++) {
 				blocks[0][i][j].draw(xPos - Player.DISPLAY_POS);
 			}
 		}
+		//TODO: Graphics end render world (Graphics.endWorld())
 	}
 	
 	public Blocks blockAt(int x, int y) {
