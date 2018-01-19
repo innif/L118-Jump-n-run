@@ -16,7 +16,7 @@ public class Player {
 	
 	public Player(World w) {
 		this.w = w;
-		texture = new Texture("res/textures/test.png");
+		texture = new Texture("res/textures/Player.png");
 		posX = 0;
 		posY = 6;
 		sizeX = World.TILESIZE;
@@ -26,7 +26,7 @@ public class Player {
 	
 	public void jump() {
 		if(overBlock()) {
-			fallSpeed = (float) -0.1;
+			fallSpeed = (float) -0.27;
 		}
 	}
 	
@@ -34,7 +34,7 @@ public class Player {
 		if(overBlock() && fallSpeed >= 0) {
 			fallSpeed = 0;
 		}else {
-			fallSpeed += 0.001;
+			fallSpeed += 0.01;
 		}
 		moveUp(-fallSpeed);
 	}

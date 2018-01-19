@@ -51,7 +51,7 @@ public class Game {
 	{
 		p.update();
 		p.jump();
-		p.moveRight(0.1);
+		//p.moveRight(0.1);
 	}
 	
 	/**
