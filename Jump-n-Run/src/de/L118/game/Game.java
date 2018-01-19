@@ -1,7 +1,10 @@
 package de.L118.game;
 
+import org.lwjgl.input.Keyboard;
+
 import graphics.Graphics;
 import graphics.renderer.Renderer;
+import utils.input.Input;
 
 /**
  * 
@@ -108,9 +111,10 @@ public class Game {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
-			while (delta >= 1) 
+			if (delta >= 1) 
 			{
 				update();
+				Input.update();
 				ups++;
 				delta--;
 			}
