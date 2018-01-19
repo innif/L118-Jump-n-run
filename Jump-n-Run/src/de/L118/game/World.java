@@ -45,7 +45,7 @@ public class World {
 	}
 	
 	public void loadWorld() {
-		//TODO
+		//File file = new File();
 	}
 	
 	public void update() {
@@ -56,14 +56,14 @@ public class World {
 		//TODO: Graphics begin render world (Graphics.beginWorld())
 		for(int i = 0; i < blocks[0].length; i++) {
 			for(int j = 0; j < blocks[0][0].length; j++) {
-				blocks[0][i][j].draw(xPos - Player.DISPLAY_POS);
+				//blocks[0][i][j].draw(xPos - Player.DISPLAY_POS);
 			}
 		}
 		//TODO: Graphics end render world (Graphics.endWorld())
 	}
 	
 	public Blocks blockAt(int x, int y) {
-		if(x>= blocks[0].length || y>= blocks[0][0].length || x<0 || y<0) {
+		if(x>= blocks[0].length || y>= blocks[0][0].length || x<0 || y<0 || blocks[0][x][y] == null) {
 			return new Blocks();
 		}else {
 			return blocks[0][x][y];
