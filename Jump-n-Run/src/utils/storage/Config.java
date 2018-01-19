@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -95,7 +96,7 @@ public class Config {
 		String map_json = readFileAsString(file);
 		
 		JSONObject map = new JSONObject(map_json);
-		List<Object> layers = map.getJSONArray("layers").toList().stream().filter(layer -> ((JSONObject)layer).getString("type").equalsIgnoreCase("tilelayer")).collect(Collectors.toList());
+		List<Object> layers = map.getJSONArray("layers").toList().stream().filter(layer -> ((String)((HashMap<String,Object>)layer).get("type")).equalsIgnoreCase("tilelayer")).collect(Collectors.toList());
 		JSONArray tilesets = map.getJSONArray("tilesets");
 		
 		final Blocks[][][] out;
@@ -112,18 +113,18 @@ public class Config {
 		MapStruct output = new MapStruct();
 		output.tilesets = getTilesets(file, tilesets);
 		
-		for(int i = layers.size()-1; i >= 0;i++) {
-			JSONObject layer = (JSONObject) layers.get(i);
-			if(layer.has("properties")) {
-				JSONObject properties = layer.getJSONObject("properties");
-				if(properties.has(COLLISION_PROPERTY) && properties.getBoolean(COLLISION_PROPERTY))
+		for(int i = layers.size()-1; i >= 0;i--) {
+			HashMap<String,Object> layer = (HashMap<String,Object>)layers.get(i);
+			if(layer.containsKey("properties")) {
+				HashMap<String,Object> properties = (HashMap<String,Object>) layer.get("properties");
+				if(properties.containsKey(COLLISION_PROPERTY) && (boolean)properties.get(COLLISION_PROPERTY))
 					output.collisionLayer = i;
 				
 				
 			}
 			
 			List<Integer> data = new ArrayList<>();
-			layer.getJSONArray("date").forEach(entry -> data.add((int)entry));
+			((ArrayList<Object>)layer.get("data")).forEach(entry -> data.add((int)entry));
 			
 			for(int j = 0; j < data.size(); j++) {
 				int x = j%map_width;
@@ -151,6 +152,7 @@ public class Config {
 			
 		}
 		
+		output.blocks = out;
 		
 		return output;
 		
@@ -160,11 +162,12 @@ public class Config {
 		
 		final ArrayList<Tileset> out = new ArrayList<>();
 		
+		
 		tilesets.forEach(thattileset -> {
 			JSONObject tileset = (JSONObject) thattileset;
 			Tileset toPut = new Tileset();
 			toPut.setStartID(tileset.getInt("firstgid"));
-			String path = tileset.getString("Source");
+			String path = tileset.getString("source");
 			
 			File tileset_file = new File(mapfile.getParent() + "/" + path);
 			
@@ -194,9 +197,9 @@ public class Config {
 		int tilecount = 0;
 		
 		while(m.find()) {
-			path = m.group(1);
-			columns = Integer.parseInt(m.group(3));
-			tilecount = Integer.parseInt(m.group(2));
+			path = m.group(3);
+			columns = Integer.parseInt(m.group(2));
+			tilecount = Integer.parseInt(m.group(1));
 			break;
 		}
 		
