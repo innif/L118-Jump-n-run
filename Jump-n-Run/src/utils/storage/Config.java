@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
  */
 public class Config {
 	
+	private static ArrayList<IStorageClass> storageClasses = new ArrayList<>();
+	
 	/*
 		Loads {@link StorageObject}'s of specified files into RAM which increases speed but junks the RAM at high amount
 
@@ -91,6 +93,10 @@ public class Config {
 	
 	}
 	
+	/*
+	
+	
+	 */
 	public static MapStruct getMap(File file) {
 	
 		String map_json = readFileAsString(file);
@@ -108,7 +114,6 @@ public class Config {
 		out = new Blocks[map_depth][map_width][map_height];
 		
 		final String COLLISION_PROPERTY = "collision";
-		int collisionLayer = -1;
 		
 		MapStruct output = new MapStruct();
 		output.tilesets = getTilesets(file, tilesets);
@@ -128,20 +133,19 @@ public class Config {
 			
 			for(int j = 0; j < data.size(); j++) {
 				int x = j%map_width;
-				int y = j/map_width;
+				int y = map_height-j/map_width-1;
 				
 				int type = data.get(j);
 				int max = 0;
 				Tileset tileset_toPut = null;
 				if(type != 0) {
 					for (Tileset tileset : output.tilesets) {
-						if(tileset.getStartID() < type && max < tileset.getStartID()) {
+						if(tileset.getStartID() <= type && max < tileset.getStartID()) {
 							tileset_toPut = tileset;
 							max = tileset.getStartID();
 						}
 					}
-					
-					type -= tileset_toPut.getStartID();
+					type -= tileset_toPut.getStartID()-1;
 					
 				}
 				
