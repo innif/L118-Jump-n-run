@@ -1,0 +1,18 @@
+package graphics.renderer.world;
+
+import graphics.renderer.shader.ShaderProgram;
+import graphics.renderer.shader.UniformMatrix;
+
+public class WorldShader extends ShaderProgram
+{
+	public UniformMatrix projectionMatrix = new UniformMatrix("pr_matrix");
+	public UniformMatrix viewMatrix = new UniformMatrix("vw_matrix");
+	
+	protected WorldShader()
+	{
+		super("shader/world.vert", "shaders/world.frag");
+	}
+
+	
+	
+}

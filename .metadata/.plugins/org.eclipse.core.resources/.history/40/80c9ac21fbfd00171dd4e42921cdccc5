@@ -1,0 +1,19 @@
+package graphics.renderer.world;
+
+import graphics.renderer.shader.ShaderProgram;
+import graphics.renderer.shader.UniformMatrix;
+import graphics.renderer.shader.UniformSamplerArray;
+import graphics.renderer.shader.UniformVec2;
+
+public class WorldShader extends ShaderProgram
+{
+	public UniformVec2 screenSize = new UniformVec2("screenSize");
+	public UniformMatrix viewMatrix = new UniformMatrix("vw_matrix");
+	public UniformSamplerArray samplers = new UniformSamplerArray("textures", 32);
+	
+	protected WorldShader()
+	{
+		super("shader/world.vert", "shaders/world.frag");
+	}
+
+}

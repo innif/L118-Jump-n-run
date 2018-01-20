@@ -1,0 +1,11 @@
+package graphics.renderer;
+
+public class TextRenderer
+{
+
+	public TextRenderer()
+	{
+		
+	}
+	
+}

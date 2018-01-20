@@ -1,10 +1,13 @@
 package de.L118.game;
 
+import java.io.File;
+
 import org.lwjgl.input.Keyboard;
 
 import graphics.Graphics;
-import graphics.renderer.Renderer;
 import utils.input.Input;
+import utils.storage.Config;
+import graphics.renderer.SpriteRenderer;
 
 /**
  * 
@@ -33,8 +36,9 @@ public class Game {
 	 */
 	private void init()
 	{
-		Renderer.init();
-		w = new World();
+		SpriteRenderer.init();
+		
+		w = new World(Config.getMap(new File("res/maps/test.json")));
 		p = new Player(w);
 	}
 	
@@ -43,7 +47,7 @@ public class Game {
 	 */
 	private void cleanUp()
 	{
-		Renderer.cleanUp();
+		SpriteRenderer.cleanUp();
 	}
 	
 	/**
@@ -54,6 +58,7 @@ public class Game {
 	{
 		p.update();
 		p.jump();
+		w.update();
 		//p.moveRight(0.1);
 	}
 	
@@ -81,7 +86,7 @@ public class Game {
 	
 	/**
 	 * 
-	 * Schließt das Spiel
+	 * Schlieï¿½t das Spiel
 	 * 
 	 */
 	public void stop()

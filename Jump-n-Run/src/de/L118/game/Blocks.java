@@ -1,7 +1,6 @@
 package de.L118.game;
 
-import graphics.Texture;
-import graphics.renderer.Renderer;
+import graphics.renderer.world.WorldRenderer;
 import utils.storage.map.Tileset;
 
 public class Blocks {
@@ -41,10 +40,11 @@ public class Blocks {
 		return sizeY;
 	}
 	
-	public void draw(float xPos) {
+	public void draw(WorldRenderer renderer) {
 		if(type != 0) {
 			//TODO: Methode von Luca benutzen
 			//Graphics.drawBlock(x,y,width,height,tileset,id);
+			renderer.drawBlock(x * sizeX, y * sizeY, sizeX, sizeY, tileset, type);
 			
 			//Renderer.drawSprite((x-xPos)*sizeX, y*sizeY, sizeX, sizeY, texture, null);
 		}

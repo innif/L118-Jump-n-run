@@ -7,8 +7,8 @@ import graphics.renderer.shader.UniformVec3;
 
 public class ColorShader extends ShaderProgram{
 
-	private static final String VERTEX_PATH = "shaders/default_color_vert.shader";
-	private static final String FRAGMENT_PATH = "shaders/default_color_frag.shader";
+	private static final String VERTEX_PATH = "shaders/default_color.vert";
+	private static final String FRAGMENT_PATH = "shaders/default_color.frag";
 	
 	public UniformMatrix modelMatrix = new UniformMatrix("ml_matrix");
 	public UniformVec2 screenSize = new UniformVec2("screenSize");

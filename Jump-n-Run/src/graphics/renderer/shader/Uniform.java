@@ -11,10 +11,10 @@ import org.lwjgl.opengl.GL20;
 public abstract class Uniform
 {
 
-	private static final int NOT_FOUND = -1;
+	protected static final int NOT_FOUND = -1;
 	
 	//Name of the uniform in the shader
-	private String name;
+	protected String name;
 	//Id of the uniform
 	private int location;
 	

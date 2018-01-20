@@ -1,7 +1,7 @@
 package de.L118.game;
 
 import graphics.Texture;
-import graphics.renderer.Renderer;
+import graphics.renderer.SpriteRenderer;
 
 
 public class Player {
@@ -62,7 +62,7 @@ public class Player {
 	}
 	
 	public void draw() {
-		Renderer.drawSprite(DISPLAY_POS*sizeX, posY*sizeY, sizeX, sizeY, texture, null);
+		SpriteRenderer.drawSprite(DISPLAY_POS*sizeX, posY*sizeY, sizeX, sizeY, texture, null);
 	}
 	
 	private boolean overBlock() {

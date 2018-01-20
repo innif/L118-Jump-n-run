@@ -1,0 +1,10 @@
+package graphics.renderer.world;
+
+public class SpriteData
+{
+
+	public float x;
+	public float y;
+	
+	
+}

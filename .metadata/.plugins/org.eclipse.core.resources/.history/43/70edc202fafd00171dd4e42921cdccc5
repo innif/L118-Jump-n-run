@@ -1,0 +1,6 @@
+package graphics.renderer.shader;
+
+public class UniformSamplerArray
+{
+
+}

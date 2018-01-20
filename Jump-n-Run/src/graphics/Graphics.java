@@ -7,7 +7,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-import graphics.renderer.Renderer;
+import graphics.renderer.SpriteRenderer;
 
 public class Graphics {
 
@@ -26,6 +26,9 @@ public class Graphics {
 			Display.setTitle(title);
 			Display.setResizable(false);
 			Display.create();
+			
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
@@ -68,7 +71,7 @@ public class Graphics {
 	 */
 	public static void fillRect(float x, float y, float width, float height, Color color)
 	{
-		Renderer.drawSprite(x, y, width, height, color, null);
+		SpriteRenderer.drawSprite(x, y, width, height, color, null);
 	}
 	
 	
@@ -84,7 +87,7 @@ public class Graphics {
 	 */
 	public static void drawTexture(float x, float y, float width, float height, Texture texture)
 	{
-		Renderer.drawSprite(x, y, width, height, texture, null);
+		SpriteRenderer.drawSprite(x, y, width, height, texture, null);
 	}
 	
 }

@@ -1,0 +1,10 @@
+package graphics.renderer.world;
+
+import graphics.renderer.shader.ShaderProgram;
+
+public class WorldShader extends ShaderProgram
+{
+
+	
+	
+}

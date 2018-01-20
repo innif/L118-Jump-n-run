@@ -1,0 +1,13 @@
+package graphics.renderer.shader;
+
+public class UniformSamplerArray extends Uniform
+{
+
+	protected UniformSamplerArray(String name)
+	{
+		super(name);
+	}
+
+	
+	
+}

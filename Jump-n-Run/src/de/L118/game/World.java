@@ -1,5 +1,11 @@
 package de.L118.game;
 
+import org.lwjgl.input.Keyboard;
+
+import graphics.renderer.world.WorldRenderer;
+import utils.input.Input;
+import utils.storage.map.MapStruct;
+
 public class World {
 	
 	public static final int TILESIZE = 100;
@@ -12,6 +18,9 @@ public class World {
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,0,0,0,2,1,3,0,2}
 	};
 	
+	private WorldRenderer renderer;
+	private int collisionLayer;
+	
 	public World() {
 		blocks = new Blocks[1][types[0].length][types.length];
 		xPos = (float) 0;
@@ -21,6 +30,17 @@ public class World {
 				//blocks[0][i][j] = new Blocks(i,j, types[types.length-(j+1)][i]);
 			}
 		}
+		renderer = new WorldRenderer();
+	}
+	
+	public World(MapStruct mapInfo)
+	{
+		blocks = mapInfo.blocks;
+		this.collisionLayer = mapInfo.collisionLayer;
+		
+		xPos = 0.0f;
+		
+		renderer = new WorldRenderer();
 	}
 	
 	public boolean isObject(int x, int y) {
@@ -49,16 +69,22 @@ public class World {
 	}
 	
 	public void update() {
-		
+		if (Input.isKeyDown(Keyboard.KEY_D))
+			xPos++;
 	}
 	
 	public void render() {
 		//TODO: Graphics begin render world (Graphics.beginWorld())
+		renderer.beginWorld((int) (xPos - Player.DISPLAY_POS), 0);
 		for(int i = 0; i < blocks[0].length; i++) {
 			for(int j = 0; j < blocks[0][0].length; j++) {
 				//blocks[0][i][j].draw(xPos - Player.DISPLAY_POS);
+				if (blocks[0][i][j] != null)
+					blocks[0][i][j].draw(renderer);
 			}
 		}
+		renderer.endWorld();
+		renderer.showWorld();
 		//TODO: Graphics end render world (Graphics.endWorld())
 	}
 	
@@ -66,7 +92,7 @@ public class World {
 		if(x>= blocks[0].length || y>= blocks[0][0].length || x<0 || y<0 || blocks[0][x][y] == null) {
 			return new Blocks();
 		}else {
-			return blocks[0][x][y];
+			return blocks[collisionLayer][x][y];
 		}
 	}
 }
