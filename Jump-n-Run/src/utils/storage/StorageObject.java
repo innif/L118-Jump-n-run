@@ -7,27 +7,19 @@ package utils.storage;
 
  */
 
-public class StorageObject {
+import utils.JSON.JSONObject;
 
-	/*
-		Sets or creates an entry to/for the StorageObject.
+import java.io.File;
+import java.util.HashMap;
 
-		@param key      the key of the entry you want to change
-		@param object   the object that should be stored
-
-	 */
-	public void setValue(String key, Object value){
+public class StorageObject extends HashMap<String,Object>{
 	
+	public StorageObject(String JSONString) {
+		this.putAll(new JSONObject(JSONString).toMap());
 	}
-
-	/*
-		Gets the value of a specified key. Returns the value as object.
-
-		@param key      the key of the entry that should be get
-		@return         the object related to the given key
-	 */
-	public Object getValue(String key){
-		return null;
+	
+	public void saveTo(File file){
+		Config.set(file,this);
 	}
 
 }

@@ -3,6 +3,7 @@ package utils.storage;
 import de.L118.game.Blocks;
 import graphics.Texture;
 import utils.JSON.JSONArray;
+import utils.JSON.JSONException;
 import utils.JSON.JSONObject;
 import utils.storage.map.Entry;
 import utils.storage.map.MapStruct;
@@ -10,16 +11,15 @@ import utils.storage.map.Tileset;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static javax.script.ScriptEngine.FILENAME;
 
 
 /*
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  */
 public class Config {
 	
-	private static ArrayList<IStorageClass> storageClasses = new ArrayList<>();
+	private static final HashMap<String,StorageObject> RAM = new HashMap<>();
 	
 	/*
 		Loads {@link StorageObject}'s of specified files into RAM which increases speed but junks the RAM at high amount
@@ -39,19 +39,36 @@ public class Config {
 		@return StorageObject  the StorageObject that was loaded from the file
 	*/
 	public static StorageObject loadInRAM(File file) {
-		return null;
+		
+		String path = file.getAbsolutePath();
+		
+		if(RAM.containsKey(path)) {
+			return RAM.get(path);
+		}
+		
+		StorageObject object = get(file);
+		
+		RAM.put(path,object);
+		
+		return object;
 	}
 	
 	/*
 		Removes a {@link StorageObject}'s from the RAM and stores it into the file
 
 		@param  file            the file that should be removed from the ram
-		@return boolean         true if the operation was successful
-								false if the file is not loaded in RAM
-								or an IOException was thrown
+		@return int		        1 if the operation was successful
+								-1 if the file is not loaded in RAM
 	*/
-	public static boolean removeFromRAM(File file){
-		return false;
+	public static int removeFromRAM(File file){
+		
+		String path = file.getAbsolutePath();
+		
+		if(!RAM.containsKey(path)) {
+			return -1;
+		}
+		RAM.remove(path);
+		return 1;
 	}
 	
 	/*
@@ -60,7 +77,10 @@ public class Config {
 
 	 */
 	public static void saveRAMObjects(){
-	
+		for(String path : RAM.keySet()) {
+			File file = new File(path);
+			
+		}
 	}
 	
 	/*
@@ -70,7 +90,16 @@ public class Config {
 		@return StorageObject  the StorageObject that should be returned
 	 */
 	public static StorageObject get(File file){
-		return null;
+		
+		String path = file.getAbsolutePath();
+		
+		if(RAM.containsKey(path)) {
+			return RAM.get(path);
+		}
+		
+		String json = readFileAsString(file).replace("\n","");
+		StorageObject out = new StorageObject(json);
+		return out;
 	}
 	
 	/*
@@ -80,21 +109,19 @@ public class Config {
 		@return StorageObject  the StorageObject that should be returned
 	 */
 	public static void set(File file, StorageObject storageObject){
-	
-	}
-	
-	/*
-		Adds the ability to store special class-objects in files
-
-		@param  storageClass    the class the should be able to be saves in files
-		@see utils.storage.IStorageClass
-	 */
-	public static void addIStorageClass(IStorageClass storageClass){
-	
+		JSONObject object = new JSONObject(storageObject);
+		
+		writeFile(file,object);
+		
+		
 	}
 	
 	/*
 	
+	Gibt ein {@link MapStruct} zurück, welches die Informationen über Blöcke, Collisionen und die Tilesets enthält
+	
+	@param  file		Datei, die zu einem MapStruct formatiert werden soll
+	@return MapStruct 	Karte die ausgelesen wurde.
 	
 	 */
 	public static MapStruct getMap(File file) {
@@ -249,7 +276,16 @@ public class Config {
 		
 	}
 	
-	private static String readFileAsString(File file) {
+	/*
+	
+	Gibt den Inhalt einer Datei als String zurück.
+	Jede Linie ist mit einem \n abgeteilt.
+	
+	@param  file	Datei die ausgelesen werden soll
+	@return String 	Inhalt der Datei
+	
+	*/
+	public static String readFileAsString(File file) {
 		if(!file.exists())
 			return null;
 		
@@ -272,6 +308,26 @@ public class Config {
 		String output = out.toString();
 		return output.substring(0,output.length() - "\n".length());
 		
+	}
+	
+	private static void writeFile(File file,JSONObject jsonObject) {
+		
+		if(!file.exists())
+			return;
+		
+		if(!file.isFile())
+			return;
+		
+		
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+			
+			String content = jsonObject.toString();
+			
+			bw.write(content);
+			
+		} catch (IOException e) {
+		
+		}
 	}
 	
 	
