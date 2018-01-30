@@ -58,6 +58,43 @@ public class Texture {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 	}
 	
+	public Texture(String path, int filterMode)
+	{
+		int[] pixels = null;
+		try {
+			BufferedImage image = ImageIO.read(new FileInputStream(path));
+			width = image.getWidth();
+			height = image.getHeight();
+			pixels = new int[width * height];
+			image.getRGB(0, 0, width, height, pixels, 0, width);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		int[] data = new int[width * height];
+		for (int i = 0; i < width * height; i++)
+		{
+			int a = (pixels[i] & 0xff000000) >> 24;
+			int r = (pixels[i] & 0xff0000) >> 16;
+			int g = (pixels[i] & 0xff00) >> 8;
+			int b = (pixels[i] & 0xff);
+			
+			data[i] = a << 24 | b << 16 | g << 8 | r;
+		}
+		
+		id = GL11.glGenTextures();
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, filterMode);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, filterMode);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, storeDataInIntBuffer(data));
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+	}
+	
+	
 	private static IntBuffer storeDataInIntBuffer(int[] data)
 	{
 		IntBuffer result = BufferUtils.createIntBuffer(data.length);

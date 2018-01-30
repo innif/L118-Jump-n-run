@@ -13,5 +13,5 @@ out DATA {
 void main()
 {
 	vs_out.uvs = texCoords;
-	gl_Position = (ml_matrix * position) / vec4(screenSize, 1.0, 1.0) - vec4(1.0, 1.0, 0.0, 0.0);
+	gl_Position = (ml_matrix * position) / vec4(screenSize / 2.0, 1.0, 1.0) - vec4(1.0, 1.0, 0.0, 0.0);
 }

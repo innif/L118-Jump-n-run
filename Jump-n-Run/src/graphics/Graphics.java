@@ -6,6 +6,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.PixelFormat;
 
 import graphics.renderer.SpriteRenderer;
 
@@ -25,7 +26,7 @@ public class Graphics {
 			Display.setFullscreen(fullscreen);
 			Display.setTitle(title);
 			Display.setResizable(false);
-			Display.create();
+			Display.create(new PixelFormat().withSamples(8));
 			
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
