@@ -90,8 +90,7 @@ public class WorldRenderer
 	private static FloatBuffer storeDataInFloatBuffer(float[] data)
 	{
 		FloatBuffer result = BufferUtils.createFloatBuffer(data.length);
-		result.put(data);
-		result.flip();
+		result.put(data).flip();
 		return result;
 	}
 	
@@ -114,6 +113,7 @@ public class WorldRenderer
 	public void endWorld()
 	{
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
+		
 		FloatBuffer buffer = storeDataInFloatBuffer(vertices);
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
 
@@ -160,8 +160,9 @@ public class WorldRenderer
 		float relSizeX = (float) tileWidth / (float)textureWidth;
 		float relSizeY = (float) tileHeight / (float)textureHeight;
 		
+		float tid = addTileSet(tileSet);
 		
-		SpriteData spriteData = new SpriteData(x, y, t, c + relSizeY, addTileSet(tileSet));
+		SpriteData spriteData = new SpriteData(x, y, t, c + relSizeY, tid);
 		vertices[vertexCount * VERTEX_SIZE] = spriteData.x;
 		vertices[vertexCount * VERTEX_SIZE + 1] = spriteData.y;
 		vertices[vertexCount * VERTEX_SIZE + 2] = spriteData.t;
@@ -169,7 +170,7 @@ public class WorldRenderer
 		vertices[vertexCount * VERTEX_SIZE + 4] = spriteData.tid;
 		vertexCount++;
 		
-		spriteData = new SpriteData(x + width, y, t + relSizeX, c + relSizeY, addTileSet(tileSet));
+		spriteData = new SpriteData(x + width, y, t + relSizeX, c + relSizeY, tid);
 		vertices[vertexCount * VERTEX_SIZE] = spriteData.x;
 		vertices[vertexCount * VERTEX_SIZE + 1] = spriteData.y;
 		vertices[vertexCount * VERTEX_SIZE + 2] = spriteData.t;
@@ -177,7 +178,7 @@ public class WorldRenderer
 		vertices[vertexCount * VERTEX_SIZE + 4] = spriteData.tid;
 		vertexCount++;
 		
-		spriteData = new SpriteData(x + width, y + height, t + relSizeX, c, addTileSet(tileSet));
+		spriteData = new SpriteData(x + width, y + height, t + relSizeX, c, tid);
 		vertices[vertexCount * VERTEX_SIZE] = spriteData.x;
 		vertices[vertexCount * VERTEX_SIZE + 1] = spriteData.y;
 		vertices[vertexCount * VERTEX_SIZE + 2] = spriteData.t;
@@ -185,7 +186,7 @@ public class WorldRenderer
 		vertices[vertexCount * VERTEX_SIZE + 4] = spriteData.tid;
 		vertexCount++;
 		
-		spriteData = new SpriteData(x, y + height, t, c, addTileSet(tileSet));
+		spriteData = new SpriteData(x, y + height, t, c, tid);
 		vertices[vertexCount * VERTEX_SIZE] = spriteData.x;
 		vertices[vertexCount * VERTEX_SIZE + 1] = spriteData.y;
 		vertices[vertexCount * VERTEX_SIZE + 2] = spriteData.t;
@@ -196,18 +197,18 @@ public class WorldRenderer
 		indexCount += 6;
 	}
 	
-	private int addTileSet(Tileset tileset)
+	private float addTileSet(Tileset tileset)
 	{
 		for (int i = 0; i < textures.size(); i++)
 		{
 			Texture texture = textures.get(i);
 			if (texture.getID() == tileset.getImage().getID())
 			{
-				return i;
+				return (float)i;
 			}
 		}
 		textures.add(tileset.getImage());
-		return textures.size() - 1;
+		return (float)textures.size() - 1.0f;
 	}
 	
 }
