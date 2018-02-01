@@ -2,9 +2,14 @@ package de.L118.game;
 
 import org.lwjgl.input.Keyboard;
 
+import de.L118.game.items.base.IItem;
+import de.L118.game.items.base.TestItem;
+import de.L118.game.items.ingame.Item;
 import graphics.renderer.world.WorldRenderer;
 import utils.input.Input;
 import utils.storage.map.MapStruct;
+
+import java.util.ArrayList;
 
 public class World {
 	
@@ -18,27 +23,23 @@ public class World {
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,0,0,0,2,1,3,0,2}
 	};
 	
+	private ArrayList<Item> items;
 	private WorldRenderer renderer;
 	private int collisionLayer;
-	
-	public World() {
-		blocks = new Blocks[1][types[0].length][types.length];
-		xPos = (float) 0;
-
-		for(int i = 0; i < blocks[0].length; i++) {
-			for(int j = 0; j < blocks[0][0].length; j++) {
-				//blocks[0][i][j] = new Blocks(i,j, types[types.length-(j+1)][i]);
-			}
-		}
-		renderer = new WorldRenderer();
-	}
 	
 	public World(MapStruct mapInfo)
 	{
 		blocks = mapInfo.blocks;
+		items = new ArrayList<>();
 		this.collisionLayer = mapInfo.collisionLayer;
 		
 		xPos = 0.0f;
+		
+		IItem testItem = new TestItem();
+		Item  item     = new Item(2, 2, testItem.getID(),this);
+		item.setMoving(true);
+		items.add(item);
+		
 		
 		renderer = new WorldRenderer();
 	}
@@ -65,27 +66,32 @@ public class World {
 	}
 	
 	public void loadWorld() {
-		//File file = new File();
 	}
 	
 	public void update() {
 		if (Input.isKeyDown(Keyboard.KEY_D))
 			xPos++;
+		items.forEach(Item::update);
 	}
 	
 	public void render() {
-		//TODO: Graphics begin render world (Graphics.beginWorld())
 		renderer.beginWorld((int) (xPos - Player.DISPLAY_POS), 0);
-		for(int i = 0; i < blocks[0].length; i++) {
-			for(int j = 0; j < blocks[0][0].length; j++) {
-				//blocks[0][i][j].draw(xPos - Player.DISPLAY_POS);
-				if (blocks[0][i][j] != null)
-					blocks[0][i][j].draw(renderer);
+		
+		for(int z = 0; z < blocks.length; z++) {
+			for (int x = 0 ; x < blocks[z].length ; x++) {
+				for (int y = 0 ; y < blocks[z][x].length ; y++) {
+					if (blocks[z][x][y] != null)
+						blocks[z][x][y].draw(renderer);
+					
+				}
 			}
 		}
+		
+		items.forEach(item -> item.draw(renderer));
+		
 		renderer.endWorld();
 		renderer.showWorld();
-		//TODO: Graphics end render world (Graphics.endWorld())
+		
 	}
 	
 	public Blocks blockAt(int x, int y) {
