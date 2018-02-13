@@ -1,48 +1,36 @@
-package de.L118.game.items.ingame;
+package de.L118.game.entitys.items.ingame;
 
 import de.L118.game.World;
-import de.L118.game.items.base.IItem;
-import graphics.Graphics;
-import graphics.Texture;
+import de.L118.game.entitys.NPE;
+import de.L118.game.entitys.items.base.IItem;
 import graphics.renderer.world.WorldRenderer;
 import utils.storage.map.Tileset;
 
-import javax.swing.*;
 import java.util.Random;
 
-public class Item {
+public class Item extends NPE {
 	
 	public final static Random rnd      = new Random();
 	public static final float
-		    VELOCITY 					= 0.03f,
+			VELOCITY 					= 0.03f,
 			ACCELERATION                = 0.005f,
-			DEFAULT_FALLSPEED           = -0.04f;
+			DEFAULT_FALLSPEED           = 0.054f;
 	
-	private float   x;
-	private float   y;
-	private int     sizeX;
-	private int     sizeY;
 	private Tileset tileset;
 	private short   id;
 	private short   tilesetID;
 	private boolean moves;
 	private boolean direction;
 	private float   fallspeed;
-	private World   world;
 	
-	public Item(int x, int y, short id, World world) {
+	public Item(World world, float x, float y, float height, float width, short id) {
 		
-		this.world = world;
-		fallspeed = DEFAULT_FALLSPEED;
+		super(x, y, world, height, width);
 		this.id = id;
 		IItem item = IItem.getItemByID(id);
 		this.tileset = item.getTileset();
 		this.tilesetID = item.getTilesetID();
-		this.sizeX = item.getSizeX();
-		this.sizeY = item.getSizeY();
-		this.x = x;
-		this.y = y;
-		
+		fallspeed = DEFAULT_FALLSPEED;
 	}
 	
 	public void setMovingInRandomDir() {
@@ -57,6 +45,60 @@ public class Item {
 		moves = true;
 		
 	}
+	
+	@Override
+	public void update() {
+		
+		System.out.println(getY());
+		if(!(fallspeed == DEFAULT_FALLSPEED && isOnBlock())) {
+			int response = moveUpDown(fallspeed);
+			switch (response) {
+				case -2:
+				case 0:
+				case 2:
+					fallspeed -= ACCELERATION;
+					break;
+				case -1:
+					System.out.println(response);
+					fallspeed = DEFAULT_FALLSPEED;
+					break;
+				case 1:
+					fallspeed = 0;
+					break;
+			}
+		}
+		if (moves) {
+			int response = moveRightLeft(VELOCITY);
+			switch (response) {
+				case 1:
+				case -1:
+					direction = !direction;
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	
+	@Override
+	public void draw(WorldRenderer renderer) {
+		
+		renderer.drawBlock((int) (getX() * getWidth()*World.TILESIZE), (int) (getY() * World.TILESIZE), World.TILESIZE, World.TILESIZE, tileset, tilesetID);
+	}
+	
+	/*
+	
+	public Item(float x, float y, short id, World world) {
+		
+		this.world = world;
+		fallspeed = DEFAULT_FALLSPEED;
+		this.sizeX = item.getSizeX();
+		this.sizeY = item.getSizeY();
+		this.x = x;
+		this.y = y;
+		
+	}
+	
 	
 	public float getX() {
 		
@@ -79,16 +121,11 @@ public class Item {
 	}
 	
 	public void draw(WorldRenderer renderer) {
-		
-		renderer.drawBlock((int) (x * sizeX), (int) (y * sizeY), sizeX, sizeY, tileset, tilesetID);
+	
 	}
 	
 	public void update() {
-		
-		fall();
-		if (moves) {
-			moveLR();
-		}
+	
 	}
 	
 	private void fall() {
@@ -148,5 +185,5 @@ public class Item {
 	public short getID() {
 		
 		return id;
-	}
+	}*/
 }

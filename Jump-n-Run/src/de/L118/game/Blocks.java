@@ -42,11 +42,7 @@ public class Blocks {
 	
 	public void draw(WorldRenderer renderer) {
 		if(type != 0) {
-			//TODO: Methode von Luca benutzen
-			//Graphics.drawBlock(x,y,width,height,tileset,id);
 			renderer.drawBlock(x * sizeX, y * sizeY, sizeX, sizeY, tileset, type);
-			
-			//Renderer.drawSprite((x-xPos)*sizeX, y*sizeY, sizeX, sizeY, texture, null);
 		}
 	}
 	

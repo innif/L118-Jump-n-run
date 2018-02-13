@@ -1,4 +1,4 @@
-package de.L118.game.items.base;
+package de.L118.game.entitys.items.base;
 
 import de.L118.game.Player;
 

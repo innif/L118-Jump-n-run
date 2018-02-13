@@ -2,9 +2,10 @@ package de.L118.game;
 
 import org.lwjgl.input.Keyboard;
 
-import de.L118.game.items.base.IItem;
-import de.L118.game.items.base.TestItem;
-import de.L118.game.items.ingame.Item;
+import de.L118.game.entitys.Entity;
+import de.L118.game.entitys.items.base.IItem;
+import de.L118.game.entitys.items.base.TestItem;
+import de.L118.game.entitys.items.ingame.Item;
 import graphics.renderer.world.WorldRenderer;
 import utils.input.Input;
 import utils.storage.map.MapStruct;
@@ -23,22 +24,22 @@ public class World {
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,0,0,0,2,1,3,0,2}
 	};
 	
-	private ArrayList<Item> items;
-	private WorldRenderer renderer;
-	private int collisionLayer;
+	private ArrayList<Entity> entities;
+	private WorldRenderer     renderer;
+	private int               collisionLayer;
 	
 	public World(MapStruct mapInfo)
 	{
 		blocks = mapInfo.blocks;
-		items = new ArrayList<>();
+		entities = new ArrayList<>();
 		this.collisionLayer = mapInfo.collisionLayer;
 		
 		xPos = 0.0f;
 		
 		IItem testItem = new TestItem();
-		Item  item     = new Item(2, 2, testItem.getID(),this);
+		Item  item     = new Item(this, 2, 2, 1, 1, testItem.getID());
 		item.setMoving(true);
-		items.add(item);
+		entities.add(item);
 		
 		
 		renderer = new WorldRenderer();
@@ -71,7 +72,7 @@ public class World {
 	public void update() {
 		if (Input.isKeyDown(Keyboard.KEY_D))
 			xPos++;
-		items.forEach(Item::update);
+		entities.forEach(Entity::updateEntity);
 	}
 	
 	public void render() {
@@ -87,7 +88,7 @@ public class World {
 			}
 		}
 		
-		items.forEach(item -> item.draw(renderer));
+		entities.forEach(entity -> entity.drawEntity(renderer));
 		
 		renderer.endWorld();
 		renderer.showWorld();
