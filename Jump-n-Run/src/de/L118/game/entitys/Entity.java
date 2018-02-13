@@ -113,13 +113,13 @@ public abstract class Entity {
 				Blocks block = getClosestBlockRightLeft(velocity);
 				if (block != null) {
 					moveLeftToBlock(block.getX());
-					return -2;
+					return -1;
 				} else {
 					x += velocity;
-					return -1;
+					return -2;
 				}
 			} else {
-				return -2;
+				return -1;
 			}
 		}
 	}
@@ -219,19 +219,30 @@ public abstract class Entity {
 	
 	private Blocks getClosestBlockRightLeft(float toCheck) {
 		
+		
 		int multi = (int)(toCheck/Math.abs(toCheck));
 		toCheck = Math.abs(toCheck);
+		int checks = (int)toCheck;
 		
-		for (int i = 0 ; i < toCheck ; i++) {
+		for (int i = 0 ; i < checks ; i++) {
 			for (int m = 0 ; m <= 1 ; m ++) {
 				float[] corner = corners[(multi == -1 ? (m == 0 ? 0 : 1) : (m == 0 ? 2 : 3))];
-				Blocks thisBlock = getBlock(corner[0] + (i+FLOATING_DIST) * multi, corner[1] + height * m);
+				Blocks thisBlock = getBlock(corner[0] + (i+FLOATING_DIST) * multi, corner[1] + width * m);
 				if (thisBlock.isBlock()) {
 					return thisBlock;
 				}
 				
 			}
 		}
+		
+		for (int m = 0 ; m <= 1 ; m ++) {
+			float[] corner = corners[(multi == -1 ? (m == 0 ? 0 : 1) : (m == 0 ? 2 : 3))];
+			Blocks thisBlock = getBlock(corner[0] + toCheck * multi, corner[1] + width * m);
+			if (thisBlock.isBlock()) {
+				return thisBlock;
+			}
+		}
+		
 		return null;
 	}
 	

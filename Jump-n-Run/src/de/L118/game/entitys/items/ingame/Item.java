@@ -10,11 +10,13 @@ import java.util.Random;
 
 public class Item extends NPE {
 	
-	public final static Random rnd      = new Random();
+	public final static Random rnd = new Random();
+	
 	public static final float
-			VELOCITY 					= 0.03f,
-			ACCELERATION                = 0.005f,
-			DEFAULT_FALLSPEED           = 0.054f;
+			VERTICAL_ACCELERATION   = 0.005f,
+			DEFAULT_FALLSPEED       = 0.054f,
+			MAX_VELOCITY            = 0.05f,
+			HORIZONTAL_ACCELERATION = 0.02f;
 	
 	private Tileset tileset;
 	private short   id;
@@ -22,6 +24,7 @@ public class Item extends NPE {
 	private boolean moves;
 	private boolean direction;
 	private float   fallspeed;
+	private float   velocity;
 	
 	public Item(World world, float x, float y, float height, float width, short id) {
 		
@@ -31,6 +34,7 @@ public class Item extends NPE {
 		this.tileset = item.getTileset();
 		this.tilesetID = item.getTilesetID();
 		fallspeed = DEFAULT_FALLSPEED;
+		velocity = MAX_VELOCITY;
 	}
 	
 	public void setMovingInRandomDir() {
@@ -49,14 +53,13 @@ public class Item extends NPE {
 	@Override
 	public void update() {
 		
-		System.out.println(getY());
-		if(!(fallspeed == DEFAULT_FALLSPEED && isOnBlock())) {
+		if (!(fallspeed == DEFAULT_FALLSPEED && isOnBlock())) {
 			int response = moveUpDown(fallspeed);
 			switch (response) {
 				case -2:
 				case 0:
 				case 2:
-					fallspeed -= ACCELERATION;
+					fallspeed -= VERTICAL_ACCELERATION;
 					break;
 				case -1:
 					System.out.println(response);
@@ -68,11 +71,20 @@ public class Item extends NPE {
 			}
 		}
 		if (moves) {
-			int response = moveRightLeft(VELOCITY);
+			int response = moveRightLeft(velocity * (direction ? 1 : -1));
 			switch (response) {
+				case 2:
+				case -2:
+				case 0:
+					velocity += HORIZONTAL_ACCELERATION;
+					if (velocity > MAX_VELOCITY) {
+						velocity = MAX_VELOCITY;
+					}
+					break;
 				case 1:
 				case -1:
 					direction = !direction;
+					velocity = 0;
 					break;
 				default:
 					break;
@@ -83,7 +95,14 @@ public class Item extends NPE {
 	@Override
 	public void draw(WorldRenderer renderer) {
 		
-		renderer.drawBlock((int) (getX() * getWidth()*World.TILESIZE), (int) (getY() * World.TILESIZE), World.TILESIZE, World.TILESIZE, tileset, tilesetID);
+		renderer.drawBlock(
+				(int) (getX() * getWidth() * World.TILESIZE),
+				(int) (getY() * World.TILESIZE),
+				World.TILESIZE,
+				World.TILESIZE,
+				tileset,
+				tilesetID
+						  );
 	}
 	
 	/*
