@@ -145,8 +145,8 @@ public class SpriteRenderer {
 		shader.screenSize.loadVec2(Display.getWidth(), Display.getHeight());
 		Matrix4f modelMatrix = new Matrix4f();
 		modelMatrix.setIdentity();
-		Matrix4f.scale(new Vector3f(width, height, 0.0f), modelMatrix, modelMatrix);
 		Matrix4f.translate(new Vector2f(x, y), modelMatrix, modelMatrix);
+		Matrix4f.scale(new Vector3f(width, height, 0.0f), modelMatrix, modelMatrix);
 		
 		shader.modelMatrix.loadMatrix(modelMatrix);
 		

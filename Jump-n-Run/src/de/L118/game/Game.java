@@ -38,7 +38,7 @@ public class Game {
 	{
 		SpriteRenderer.init();
 		
-		w = new World(Config.getMap(new File("res/maps/test.json")));
+		w = new World(Config.getMap(new File("res/maps/level1.json")));
 		p = new Player(w);
 	}
 	
@@ -57,7 +57,8 @@ public class Game {
 	private void update()
 	{
 		p.update();
-		p.jump();
+		//p.jump();
+		
 		w.update();
 		//p.moveRight(0.1);
 	}
@@ -70,7 +71,7 @@ public class Game {
 	private void render()
 	{
 		w.render();
-		p.draw();
+		p.draw(null);
 	}
 	
 	/**

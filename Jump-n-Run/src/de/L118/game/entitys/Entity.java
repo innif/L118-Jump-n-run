@@ -1,12 +1,15 @@
 package de.L118.game.entitys;
 
-import de.L118.game.Blocks;
 import de.L118.game.World;
 import graphics.renderer.world.WorldRenderer;
 
+import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
+
 public abstract class Entity {
-	
-	private final static float FLOATING_DIST = 0.00001f;
 	
 	private float
 			x,
@@ -18,11 +21,18 @@ public abstract class Entity {
 	
 	private boolean isDead;
 	
-	private float[][] corners = new float[4][2];
-	
 	private World world;
+	protected Body body;
 	
-	public Entity(float x, float y, World world, float height, float width) {
+	/*
+	
+		Width: 1 = 1 Block
+		Height: 1 = 1 Block
+		X: 1 = 1 Block
+		Y: 1 = 1 Block
+	
+	*/
+	public Entity(float x, float y, World world, float width, float height) {
 		
 		this.x = x;
 		this.y = y;
@@ -30,16 +40,34 @@ public abstract class Entity {
 		this.height = height;
 		this.world = world;
 		isDead = false;
+		BodyDef def = new BodyDef();
+		def.type = BodyType.DYNAMIC;
+		def.fixedRotation = true;
+		def.position.set(x,y);
+		
+		body = world.getWorld().createBody(def);
+		
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(width / 2.0f,height / 2.0f);
+		
+		
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = shape;
+		fixtureDef.density = 1.0f;
+		fixtureDef.friction = 0.0f;
+		
+		body.createFixture(fixtureDef);
+		
 	}
 	
 	public float getX() {
 		
-		return x;
+		return body.getPosition().x;
 	}
 	
 	public float getY() {
 		
-		return y;
+		return body.getPosition().y;
 	}
 	
 	public World getWorld() {
@@ -87,41 +115,8 @@ public abstract class Entity {
 		-2 := Moved Left
 	
 	 */
-	public int moveRightLeft(float velocity) {
-		
-		if(velocity == 0)
-			return 0;
-		
-		if(velocity > 0) {
-			
-			if(!isBlockRight()) {
-				Blocks block = getClosestBlockRightLeft(velocity);
-				if (block != null) {
-					moveRightToBlock(block.getX());
-					return 1;
-				} else {
-					x += velocity;
-					return 2;
-				}
-			} else {
-				return 1;
-			}
-			
-		} else {
-			
-			if(!isBlockLeft()) {
-				Blocks block = getClosestBlockRightLeft(velocity);
-				if (block != null) {
-					moveLeftToBlock(block.getX());
-					return -1;
-				} else {
-					x += velocity;
-					return -2;
-				}
-			} else {
-				return -1;
-			}
-		}
+	public void moveRightLeft(float velocity) {
+	
 	}
 	
 	/*
@@ -132,170 +127,8 @@ public abstract class Entity {
 		-2 := Travelled down
 	 */
 	
-	public int moveUpDown(float velocity) {
-		
-		
-		if(velocity == 0)
-			return 0;
-		
-		if(velocity > 0) {
-			
-			if(!isUnderBlock()) {
-				Blocks block = getClosestBlockAboveBelow(velocity);
-				if (block != null) {
-					moveUnderBlock(block.getY());
-					return 1;
-				} else {
-					y += velocity;
-					return 2;
-				}
-			} else {
-				return 1;
-			}
-			
-		} else {
-			
-			if(!isOnBlock()) {
-				Blocks block = getClosestBlockAboveBelow(velocity);
-				if (block != null) {
-					moveOnBlock(block.getY());
-					return -1;
-				} else {
-					y += velocity;
-					return -2;
-				}
-			} else {
-				return -1;
-			}
-		}
-		
+	public void moveUpDown(float velocity) {
+	
 	}
 	
-	private void moveOnBlock(int y) {
-		
-		this.y = y+1+FLOATING_DIST;
-	}
-	
-	private void moveUnderBlock(int y) {
-		this.y = y-height-FLOATING_DIST;
-	}
-	
-	private void moveRightToBlock(int x) {
-		this.x = x-width-FLOATING_DIST;
-	}
-	
-	private void moveLeftToBlock(int x) {
-		this.x = x+1+FLOATING_DIST;
-	}
-	
-	private Blocks getClosestBlockAboveBelow(float toCheck) {
-		
-		int multi = (int)(toCheck/Math.abs(toCheck));
-		toCheck = Math.abs(toCheck);
-		int checks = (int)toCheck;
-		
-		for (int i = 0 ; i < checks ; i++) {
-			for (int m = 0 ; m <= 1 ; m ++) {
-				float[] corner = corners[(multi == -1 ? (m == 0 ? 0 : 3) : (m == 0 ? 1 : 2))];
-				Blocks thisBlock = getBlock(corner[0] + width * m, corner[1] + (i+FLOATING_DIST) * multi);
-				if (thisBlock.isBlock()) {
-					return thisBlock;
-				}
-				
-			}
-		}
-		
-		for (int m = 0 ; m <= 1 ; m ++) {
-			float[] corner = corners[(multi == -1 ? (m == 0 ? 0 : 3) : (m == 0 ? 1 : 2))];
-			Blocks thisBlock = getBlock(corner[0] + width * m, corner[1] + toCheck * multi);
-			if (thisBlock.isBlock()) {
-				return thisBlock;
-			}
-		}
-		
-		return null;
-		
-	}
-	
-	private Blocks getClosestBlockRightLeft(float toCheck) {
-		
-		
-		int multi = (int)(toCheck/Math.abs(toCheck));
-		toCheck = Math.abs(toCheck);
-		int checks = (int)toCheck;
-		
-		for (int i = 0 ; i < checks ; i++) {
-			for (int m = 0 ; m <= 1 ; m ++) {
-				float[] corner = corners[(multi == -1 ? (m == 0 ? 0 : 1) : (m == 0 ? 2 : 3))];
-				Blocks thisBlock = getBlock(corner[0] + (i+FLOATING_DIST) * multi, corner[1] + width * m);
-				if (thisBlock.isBlock()) {
-					return thisBlock;
-				}
-				
-			}
-		}
-		
-		for (int m = 0 ; m <= 1 ; m ++) {
-			float[] corner = corners[(multi == -1 ? (m == 0 ? 0 : 1) : (m == 0 ? 2 : 3))];
-			Blocks thisBlock = getBlock(corner[0] + toCheck * multi, corner[1] + width * m);
-			if (thisBlock.isBlock()) {
-				return thisBlock;
-			}
-		}
-		
-		return null;
-	}
-	
-	public boolean isOnBlock() {
-		
-		updateCorners();
-		
-		return isBlock(corners[0][0], corners[0][1]-FLOATING_DIST*1.1f) ||
-				isBlock(corners[3][0], corners[3][1]-FLOATING_DIST*1.1f);
-	}
-	
-	private boolean isUnderBlock() {
-		
-		updateCorners();
-		
-		return isBlock(corners[0][0], corners[0][1]+FLOATING_DIST) ||
-				isBlock(corners[3][0], corners[3][1]+FLOATING_DIST);
-	}
-	
-	private boolean isBlockRight() {
-		
-		updateCorners();
-		
-		return isBlock(corners[2][0]+FLOATING_DIST, corners[0][1]) ||
-				isBlock(corners[3][0]+FLOATING_DIST, corners[3][1]);
-	}
-	
-	private boolean isBlockLeft() {
-		
-		updateCorners();
-		
-		return isBlock(corners[0][0]-FLOATING_DIST, corners[0][1]) ||
-				isBlock(corners[1][0]-FLOATING_DIST, corners[3][1]);
-	}
-	
-	private boolean isBlock(float x,float y) {
-		return getBlock(x,y).isBlock();
-	}
-	
-	private Blocks getBlock(float x, float y) {
-		
-		return world.blockAt((int)x,(int)y);
-	}
-	
-	private void updateCorners(){
-		corners[0][0] = x;
-		corners[1][0] = x + height;
-		corners[2][0] = x+height;
-		corners[3][0] = x;
-		
-		corners[0][1] = y;
-		corners[1][1] = y;
-		corners[2][1] = y+height;
-		corners[3][1] = y+height;
-	}
 }

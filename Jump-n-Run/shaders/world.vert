@@ -17,5 +17,5 @@ void main()
 {
 	vs_out.uvs = texCoords;
 	vs_out.tid = tid;
-	gl_Position = ((position - vec4(worldOffset, 0.0, 0.0)) / vec4(screenSize, 1.0, 1.0)) - vec4(1.0, 1.0, 0.0, 0.0);
+	gl_Position = ((position - vec4(worldOffset, 0.0, 0.0)) / vec4(screenSize / 2.0f, 1.0, 1.0)) - vec4(1.0, 1.0, 0.0, 0.0);
 }

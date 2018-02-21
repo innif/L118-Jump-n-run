@@ -3,6 +3,12 @@ package de.L118.game;
 import graphics.renderer.world.WorldRenderer;
 import utils.storage.map.Tileset;
 
+import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
+
 public class Blocks {
 	private int     x;
 	private int     y;
@@ -11,13 +17,28 @@ public class Blocks {
 	private Tileset tileset;
 	private short   type;
 	
+	private Body body;
+	
 	public Blocks(int x, int y, short type, Tileset tileset) {
 		this.tileset = tileset;
 		this.x = x;
 		this.y = y;
-		this.sizeX = World.TILESIZE;
-		this.sizeY = World.TILESIZE;
+		this.sizeX = 1;
+		this.sizeY = 1;
 		this.type = type;
+	}
+	
+	public void createPhysics(World world)
+	{
+		BodyDef def = new BodyDef();
+		def.type = BodyType.STATIC;
+		def.position.set(x,y);
+		
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(sizeX / 2.0f,sizeY / 2.0f);
+		
+		body = world.getWorld().createBody(def);
+		body.createFixture(shape, 1.0f);
 	}
 	
 	public Blocks() {
@@ -42,7 +63,7 @@ public class Blocks {
 	
 	public void draw(WorldRenderer renderer) {
 		if(type != 0) {
-			renderer.drawBlock(x * sizeX, y * sizeY, sizeX, sizeY, tileset, type);
+			renderer.drawBlock((int) body.getPosition().x * World.TILESIZE, (int)body.getPosition().y * World.TILESIZE, sizeX * World.TILESIZE, sizeY * World.TILESIZE, tileset, type);
 		}
 	}
 	

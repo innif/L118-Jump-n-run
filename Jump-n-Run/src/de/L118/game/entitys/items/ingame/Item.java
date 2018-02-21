@@ -1,14 +1,20 @@
 package de.L118.game.entitys.items.ingame;
 
 import de.L118.game.World;
-import de.L118.game.entitys.NPE;
+import de.L118.game.entitys.Entity;
 import de.L118.game.entitys.items.base.IItem;
 import graphics.renderer.world.WorldRenderer;
 import utils.storage.map.Tileset;
 
 import java.util.Random;
 
-public class Item extends NPE {
+import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
+
+public class Item extends Entity {
 	
 	public final static Random rnd = new Random();
 	
@@ -26,15 +32,29 @@ public class Item extends NPE {
 	private float   fallspeed;
 	private float   velocity;
 	
-	public Item(World world, float x, float y, float height, float width, short id) {
+	public Item(World world, float x, float y, float width, float height, short id) {
 		
-		super(x, y, world, height, width);
+		super(x, y, world, width, height);
 		this.id = id;
 		IItem item = IItem.getItemByID(id);
 		this.tileset = item.getTileset();
 		this.tilesetID = item.getTilesetID();
 		fallspeed = DEFAULT_FALLSPEED;
 		velocity = MAX_VELOCITY;
+		
+		PolygonShape polygonShape = new PolygonShape();
+		polygonShape.setAsBox(1, 1);
+		
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.DYNAMIC;
+		bodyDef.position.set(5 * 1, 0);
+		bodyDef.angle = (float) (Math.PI / 4 * 1);
+		bodyDef.allowSleep = false;
+		System.out.println(world.getWorld());
+		Body body = world.getWorld().createBody(bodyDef);
+		body.createFixture(polygonShape, 5.0f);
+		
+		body.applyForce(new Vec2(-10000 * (1 - 1), 0), new Vec2());
 	}
 	
 	public void setMovingInRandomDir() {
@@ -52,54 +72,17 @@ public class Item extends NPE {
 	
 	@Override
 	public void update() {
-		
-		if (!(fallspeed == DEFAULT_FALLSPEED && isOnBlock())) {
-			int response = moveUpDown(fallspeed);
-			switch (response) {
-				case -2:
-				case 0:
-				case 2:
-					fallspeed -= VERTICAL_ACCELERATION;
-					break;
-				case -1:
-					System.out.println(response);
-					fallspeed = DEFAULT_FALLSPEED;
-					break;
-				case 1:
-					fallspeed = 0;
-					break;
-			}
-		}
-		if (moves) {
-			int response = moveRightLeft(velocity * (direction ? 1 : -1));
-			switch (response) {
-				case 2:
-				case -2:
-				case 0:
-					velocity += HORIZONTAL_ACCELERATION;
-					if (velocity > MAX_VELOCITY) {
-						velocity = MAX_VELOCITY;
-					}
-					break;
-				case 1:
-				case -1:
-					direction = !direction;
-					velocity = 0;
-					break;
-				default:
-					break;
-			}
-		}
+	
 	}
 	
 	@Override
 	public void draw(WorldRenderer renderer) {
 		
 		renderer.drawBlock(
-				(int) (getX() * getWidth() * World.TILESIZE),
+				(int) (getX() * World.TILESIZE),
 				(int) (getY() * World.TILESIZE),
-				World.TILESIZE,
-				World.TILESIZE,
+				(int) (getWidth() * World.TILESIZE),
+				(int) (getHeight() * World.TILESIZE),
 				tileset,
 				tilesetID
 						  );
