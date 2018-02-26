@@ -19,10 +19,8 @@ public class Item extends Entity {
 	public final static Random rnd = new Random();
 	
 	public static final float
-			VERTICAL_ACCELERATION   = 0.005f,
 			DEFAULT_FALLSPEED       = 0.054f,
-			MAX_VELOCITY            = 0.05f,
-			HORIZONTAL_ACCELERATION = 0.02f;
+			VELOCITY                = 0.05f;
 	
 	private Tileset tileset;
 	private short   id;
@@ -30,7 +28,6 @@ public class Item extends Entity {
 	private boolean moves;
 	private boolean direction;
 	private float   fallspeed;
-	private float   velocity;
 	
 	public Item(World world, float x, float y, float width, float height, short id) {
 		
@@ -40,7 +37,6 @@ public class Item extends Entity {
 		this.tileset = item.getTileset();
 		this.tilesetID = item.getTilesetID();
 		fallspeed = DEFAULT_FALLSPEED;
-		velocity = MAX_VELOCITY;
 		
 		PolygonShape polygonShape = new PolygonShape();
 		polygonShape.setAsBox(1, 1);
@@ -72,7 +68,7 @@ public class Item extends Entity {
 	
 	@Override
 	public void update() {
-	
+		move();
 	}
 	
 	@Override
@@ -86,6 +82,10 @@ public class Item extends Entity {
 				tileset,
 				tilesetID
 						  );
+	}
+	
+	private void move() {
+		body.setLinearVelocity(new Vec2(VELOCITY, body.getLinearVelocity().y));
 	}
 	
 	/*

@@ -11,17 +11,27 @@ import org.jbox2d.dynamics.FixtureDef;
 
 public abstract class Entity {
 	
-	private float
+	protected enum JumpState
+	{
+		FALLING,
+		JUMPING,
+		ONGROUND,
+		STOMPING
+	}
+	
+	protected JumpState jumpState;
+	
+	protected float
 			x,
 			y;
 	
-	private float
+	protected float
 			width,
 			height;
 	
-	private boolean isDead;
+	protected boolean isDead;
 	
-	private World world;
+	protected World world;
 	protected Body body;
 	
 	/*
@@ -40,6 +50,13 @@ public abstract class Entity {
 		this.height = height;
 		this.world = world;
 		isDead = false;
+		createBody();
+		
+		jumpState = JumpState.FALLING;
+	}
+	
+	protected void createBody()
+	{
 		BodyDef def = new BodyDef();
 		def.type = BodyType.DYNAMIC;
 		def.fixedRotation = true;
@@ -53,12 +70,13 @@ public abstract class Entity {
 		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
-		fixtureDef.density = 1.0f;
-		fixtureDef.friction = 0.0f;
-		
+		fixtureDef.density = 0.0f;
+		fixtureDef.friction = 1.0f;
+		fixtureDef.restitution = 0.0f;
 		body.createFixture(fixtureDef);
 		
 	}
+	
 	
 	public float getX() {
 		

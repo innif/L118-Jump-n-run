@@ -143,7 +143,7 @@ public class WorldRenderer
 		shader.stop();
 	}
 	
-	public void drawBlock(int x, int y, int width, int height, Tileset tileSet, int id)
+	public void drawBlock(float x, float y, float width, float height, Tileset tileSet, int id)
 	{
 		int textureWidth = tileSet.getImage().getWidth();
 		int textureHeight = tileSet.getImage().getHeight();

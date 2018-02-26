@@ -3,6 +3,7 @@ package de.L118.game;
 import java.io.File;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import graphics.Graphics;
 import utils.input.Input;
@@ -103,6 +104,7 @@ public class Game {
 	private void run()
 	{
 		Graphics.createWindow(1270, 720, "Jump n Run", false);
+		System.out.println(GL11.glGetString(GL11.GL_VERSION));
 		init();
 		
 		long lastTime = System.nanoTime();

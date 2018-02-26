@@ -18,7 +18,8 @@ public class World {
 	
 	public static final int TILESIZE = 50;
 	private Blocks[][][] blocks; // [ebene][x][y]
-	private float xPos;
+	public float xPos;
+	public float yPos;
 	
 	private org.jbox2d.dynamics.World world;
 	
@@ -28,7 +29,7 @@ public class World {
 	
 	public World(MapStruct mapInfo)
 	{
-		this.world = new org.jbox2d.dynamics.World(new Vec2(0.0f,-10f));
+		this.world = new org.jbox2d.dynamics.World(new Vec2(0.0f,-20f));
 		
 		blocks = mapInfo.blocks;
 		entities = new ArrayList<>();
@@ -43,11 +44,12 @@ public class World {
 		}
 		
 		xPos = 0.0f;
+		yPos = 0.0f;
 		
-		//IItem testItem = new TestItem();
-		//Item  item     = new Item(this, 2, 1, 1, 1, testItem.getID());
-		//item.setMoving(true);
-		//entities.add(item);
+		IItem testItem = new TestItem();
+		Item  item     = new Item(this, 2, 1, 1, 1, testItem.getID());
+		item.setMoving(true);
+		entities.add(item);
 		
 		renderer = new WorldRenderer();
 	}
@@ -82,7 +84,7 @@ public class World {
 	}
 	
 	public void render() {
-		renderer.beginWorld((int) (xPos - Player.DISPLAY_POS), 0);
+		renderer.beginWorld((int) (xPos), (int) (yPos));
 		
 		for(int z = 0; z < blocks.length; z++) {
 			for (int x = 0 ; x < blocks[z].length ; x++) {

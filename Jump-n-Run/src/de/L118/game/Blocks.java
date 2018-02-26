@@ -33,6 +33,7 @@ public class Blocks {
 		BodyDef def = new BodyDef();
 		def.type = BodyType.STATIC;
 		def.position.set(x,y);
+		def.fixedRotation = true;
 		
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(sizeX / 2.0f,sizeY / 2.0f);
@@ -63,7 +64,7 @@ public class Blocks {
 	
 	public void draw(WorldRenderer renderer) {
 		if(type != 0) {
-			renderer.drawBlock((int) body.getPosition().x * World.TILESIZE, (int)body.getPosition().y * World.TILESIZE, sizeX * World.TILESIZE, sizeY * World.TILESIZE, tileset, type);
+			renderer.drawBlock(body.getPosition().x * World.TILESIZE, body.getPosition().y * World.TILESIZE, sizeX * World.TILESIZE, sizeY * World.TILESIZE, tileset, type);
 		}
 	}
 	

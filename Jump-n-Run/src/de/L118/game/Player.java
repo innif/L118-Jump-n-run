@@ -6,13 +6,18 @@ import graphics.renderer.SpriteRenderer;
 import graphics.renderer.world.WorldRenderer;
 import utils.input.Input;
 
-import java.awt.*;
-
+import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
 
 
 public class Player extends Entity{
+	
+	
 	
 	private static final float
 		VELOCITY = 1f,
@@ -26,24 +31,87 @@ public class Player extends Entity{
 	public static final int DISPLAY_POS = 2;
 	
 	public Player(World w) {
-		super(1f,1,w,1,1);
+		super(10f,7,w,1,1);
 		this.w = w;
 		texture = new Texture("res/textures/Player.png");
 		fallSpeed = 0;
+	}
+	
+	@Override
+	protected void createBody()
+	{
+		BodyDef def = new BodyDef();
+		def.type = BodyType.DYNAMIC;
+		def.fixedRotation = true;
+		def.position.set(x,y);
+		
+		body = world.getWorld().createBody(def);
+		
+		PolygonShape shape = new PolygonShape();
+		float width = 0.3f;
+		Vec2[] points = {new Vec2(width/2,-0.5f),new Vec2(-width/2,-0.5f),new Vec2(-width,-0.2f),new Vec2(-width,0.2f),new Vec2(width/2,0.5f),new Vec2(-width/2,0.5f),new Vec2(width,0.2f),new Vec2(width,-0.2f)};
+		scale(points);
+		shape.set(points, points.length);
+		
+		
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = shape;
+		fixtureDef.density = 0.0f;
+		fixtureDef.friction = 0.0f;
+		fixtureDef.restitution = 0.0f;
+		body.createFixture(fixtureDef);
+		
+	}
+	
+	private void scale(Vec2[] points) {
+		for(int i = 0; i < points.length; i++) {
+			points[i].x *= getWidth();
+			points[i].y *= getHeight();
+		}
 	}
 	
 	public void update() {
 		
 		move(0.0f);
 		
-		if (Input.isKeyPressed(Keyboard.KEY_SPACE) || Input.isKeyPressed(Keyboard.KEY_W))
-			jump(6.5f);
+		if (Input.isKeyDown(Keyboard.KEY_SPACE) || Input.isKeyDown(Keyboard.KEY_W))
+			jump(10.0f);
+		if (Input.isKeyPressed(Keyboard.KEY_S))
+			stomp(20.0f);
 		if(Input.isKeyDown(Keyboard.KEY_A))
-			move(-3f);
+			move(-5f);
 		if(Input.isKeyDown(Keyboard.KEY_D))
-			move(3f);
+			move(5f);
 		
-		//w.setxPos((getX()-DISPLAY_POS)*100);
+		float xScreen = ((getX() + (Display.getWidth() / 2.0f / World.TILESIZE)) * World.TILESIZE) - w.xPos;
+		float yScreen = ((getY() + (Display.getHeight() / 2.0f / World.TILESIZE)) * World.TILESIZE) - w.yPos;
+		float mx = getWorldAdvanceMultiplier(xScreen);
+		float my = getWorldAdvanceMultiplier(yScreen);
+		
+		w.xPos += (map(0.0f, Display.getWidth(), -6.0f, 6.0f, xScreen - Display.getWidth() / 2.0f)) * Math.min(mx, 1.0f);
+		w.yPos += (map(0.0f, Display.getHeight(), -6.0f, 6.0f, yScreen - Display.getHeight() / 2.0f)) * Math.min(my, 1.0f);
+		
+		if (jumpState == JumpState.JUMPING && body.getLinearVelocity().y < 0.0f)
+			jumpState = JumpState.FALLING;
+		else if ((jumpState == JumpState.FALLING || jumpState == JumpState.STOMPING) && body.getLinearVelocity().y == 0.0f) {
+			if(jumpState == JumpState.STOMPING) {
+			
+			}
+			jumpState = JumpState.ONGROUND;
+		}
+		
+		//w.setxPos((getX()- 12f)* World.TILESIZE);
+	}
+	
+	public float map(float a, float b, float c, float d, float value)
+	{
+		//Y = (X-A)/(B-A) * (D-C) + C
+		return (value - a) / (b - a) * (d - c) + c;
+	}
+	
+	public float getWorldAdvanceMultiplier(float x)
+	{
+		return (1.0f / 4.0f) * x * x;
 	}
 	
 	/*
@@ -52,10 +120,22 @@ public class Player extends Entity{
 	
 	 */
 	
+	public void stomp(float vel) {
+		
+		if (jumpState == JumpState.JUMPING || jumpState == JumpState.FALLING)
+		{
+			body.applyLinearImpulse(new Vec2(body.getLinearVelocity().x,-vel), body.getWorldCenter());
+			jumpState = JumpState.STOMPING;
+		}
+	}
+	
 	public void jump(float vel)
 	{
-		if (body.getLinearVelocity().y == 0)
+		if (jumpState == JumpState.ONGROUND)
+		{
 			body.setLinearVelocity(new Vec2(body.getLinearVelocity().x,vel));
+			jumpState = JumpState.JUMPING;
+		}
 		//body.applyForceToCenter(new Vec2(0.0f, vel));
 	}
 	
@@ -66,7 +146,7 @@ public class Player extends Entity{
 	
 	public void draw(WorldRenderer renderer) {
 		
-		SpriteRenderer.drawSprite(getX() * World.TILESIZE, getY() * World.TILESIZE, getWidth() * World.TILESIZE, getHeight() * World.TILESIZE, texture, null);
+		SpriteRenderer.drawSprite((getX() * World.TILESIZE) - w.xPos, (getY() * World.TILESIZE) - w.yPos, getWidth() * World.TILESIZE, getHeight() * World.TILESIZE, texture, null);
 	}
 	
 }
