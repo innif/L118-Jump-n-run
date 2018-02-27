@@ -17,10 +17,8 @@ public class Texture {
 	private int width, height;
 	private int id;
 	
-	public Texture(int id)
-	{
-		this.id = id;
-	}
+	private int filterMode;
+	private int[] data;
 	
 	public Texture(String path)
 	{
@@ -37,7 +35,7 @@ public class Texture {
 			e.printStackTrace();
 		}
 		
-		int[] data = new int[width * height];
+		data = new int[width * height];
 		for (int i = 0; i < width * height; i++)
 		{
 			int a = (pixels[i] & 0xff000000) >> 24;
@@ -48,14 +46,8 @@ public class Texture {
 			data[i] = a << 24 | b << 16 | g << 8 | r;
 		}
 		
-		id = GL11.glGenTextures();
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, storeDataInIntBuffer(data));
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		id = -1;
+		filterMode = GL11.GL_NEAREST;
 	}
 	
 	public Texture(String path, int filterMode)
@@ -73,7 +65,7 @@ public class Texture {
 			e.printStackTrace();
 		}
 		
-		int[] data = new int[width * height];
+		data = new int[width * height];
 		for (int i = 0; i < width * height; i++)
 		{
 			int a = (pixels[i] & 0xff000000) >> 24;
@@ -84,6 +76,12 @@ public class Texture {
 			data[i] = a << 24 | b << 16 | g << 8 | r;
 		}
 		
+		id = -1;
+		this.filterMode = filterMode;
+	}
+	
+	private void create(int filterMode)
+	{
 		id = GL11.glGenTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, filterMode);
@@ -136,6 +134,8 @@ public class Texture {
 	 */
 	public void bind(int slot)
 	{
+		if (id == -1)
+			create(this.filterMode);
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + slot);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
 	}

@@ -11,7 +11,9 @@ import org.lwjgl.opengl.GL11;
 import graphics.Texture;
 
 public class Font
-{
+{ 
+	public static Font defaultFont = new Font("res/fonts/roboto_df", 1.0f);
+	
 	private static final int PADDING_TOP = 0;
 	private static final int PADDING_LEFT = 1;
 	private static final int PADDING_BOTTOM = 2;
@@ -163,10 +165,10 @@ public class Font
 		float y = cursorY - ((g.getyOffset() - lineHeight) * fontSize);
 		float maxX = x + (g.getSizeX() * fontSize);
 		float maxY = y - ((g.getSizeY()) * fontSize);
-		float properX = (2 * x) - 1;
-		float properY = (-2 * y) + 1;
-		float properMaxX = (2 * maxX) - 1;
-		float properMaxY = (-2 * maxY) + 1;
+//		float properX = (2 * x) - 1;
+//		float properY = (-2 * y) + 1;
+//		float properMaxX = (2 * maxX) - 1;
+//		float properMaxY = (-2 * maxY) + 1;
 		
 		array[index * QUAD_SIZE + 0] = x;
 		array[index * QUAD_SIZE + 1] = y;
@@ -197,6 +199,19 @@ public class Font
 		array[index * QUAD_SIZE + 21] = y;
 		array[index * QUAD_SIZE + 22] = g.getxTextureCoord();
 		array[index * QUAD_SIZE + 23] = g.getyTextureCoord();
+	}
+	
+	public float getTextWidth(String text)
+	{
+		float result = 0.0f;
+		
+		for (int i = 0; i < text.length(); i++)
+		{
+			Glyph g = getGlyph((int)text.charAt(i));
+			result += (g.getxAdvance()) * this.size;
+		}
+		
+		return result;
 	}
 	
 	public Glyph getGlyph(int ascii)

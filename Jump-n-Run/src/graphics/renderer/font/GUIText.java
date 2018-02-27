@@ -76,8 +76,18 @@ public class GUIText {
 	
 	public void setText(String text) 
 	{
-		needUpdate = true;
+		needUpdate = !this.text.equalsIgnoreCase(text);
 		this.text = text;
+	}
+	
+	public String getText()
+	{
+		return text;
+	}
+	
+	public String toString()
+	{
+		return text;
 	}
 	
 	public Vector3f getColor()

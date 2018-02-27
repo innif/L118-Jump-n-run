@@ -1,14 +1,11 @@
 package de.L118.game;
 
-import java.io.File;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
+import de.L118.game.state.MenuState;
+import de.L118.game.state.State;
 import graphics.Graphics;
-import utils.input.Input;
-import utils.storage.Config;
 import graphics.renderer.SpriteRenderer;
+import graphics.renderer.font.TextRenderer;
+import utils.input.Input;
 
 /**
  * 
@@ -21,10 +18,6 @@ import graphics.renderer.SpriteRenderer;
 public class Game {
 
 	private boolean running;
-	
-	Player p;
-	World w;
-	
 	long timer;
 	
 	public Game()
@@ -38,9 +31,9 @@ public class Game {
 	private void init()
 	{
 		SpriteRenderer.init();
+		TextRenderer.init();
 		
-		w = new World(Config.getMap(new File("res/maps/level1.json")));
-		p = new Player(w);
+		State.currentState = new MenuState(this);
 	}
 	
 	/**
@@ -48,6 +41,7 @@ public class Game {
 	 */
 	private void cleanUp()
 	{
+		TextRenderer.cleanUp();
 		SpriteRenderer.cleanUp();
 	}
 	
@@ -57,11 +51,8 @@ public class Game {
 	 */
 	private void update()
 	{
-		p.update();
-		//p.jump();
-		
-		w.update();
-		//p.moveRight(0.1);
+		if (State.currentState != null)
+			State.currentState.update();
 	}
 	
 	/**
@@ -71,8 +62,8 @@ public class Game {
 	 */
 	private void render()
 	{
-		w.render();
-		p.draw(null);
+		if (State.currentState != null)
+			State.currentState.render();
 	}
 	
 	/**
@@ -104,7 +95,6 @@ public class Game {
 	private void run()
 	{
 		Graphics.createWindow(1270, 720, "Jump n Run", false);
-		System.out.println(GL11.glGetString(GL11.GL_VERSION));
 		init();
 		
 		long lastTime = System.nanoTime();
@@ -138,7 +128,7 @@ public class Game {
 				System.out.println("FPS: " + fps + " UPS: " + ups);
 				ups = fps = 0;
 			}
-			running = Graphics.windowOpen();
+			running = Graphics.windowOpen() && running;
 		}
 		cleanUp();
 	}

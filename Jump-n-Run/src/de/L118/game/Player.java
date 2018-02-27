@@ -17,24 +17,15 @@ import org.lwjgl.opengl.Display;
 
 public class Player extends Entity{
 	
-	
-	
-	private static final float
-		VELOCITY = 1f,
-		FLOATING_DIST = 0.0001f,
-		VERTICAL_ACCELERATION = 0.02f;
-	
 	private World w;
 	private Texture texture;
 	
-	private float fallSpeed;
 	public static final int DISPLAY_POS = 2;
 	
 	public Player(World w) {
 		super(10f,7,w,1,1);
 		this.w = w;
 		texture = new Texture("res/textures/Player.png");
-		fallSpeed = 0;
 	}
 	
 	@Override

@@ -8,5 +8,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Jump-n-Run/natives/windows"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/jbox2d.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

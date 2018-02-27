@@ -1,18 +1,15 @@
 package de.L118.game;
 
-import org.jbox2d.collision.AABB;
+import java.util.ArrayList;
+
 import org.jbox2d.common.Vec2;
-import org.lwjgl.input.Keyboard;
 
 import de.L118.game.entitys.Entity;
 import de.L118.game.entitys.items.base.IItem;
 import de.L118.game.entitys.items.base.TestItem;
 import de.L118.game.entitys.items.ingame.Item;
 import graphics.renderer.world.WorldRenderer;
-import utils.input.Input;
 import utils.storage.map.MapStruct;
-
-import java.util.ArrayList;
 
 public class World {
 	
