@@ -102,7 +102,7 @@ public class Player extends Entity{
 	
 	public float getWorldAdvanceMultiplier(float x)
 	{
-		return (1.0f / 4.0f) * x * x;
+		return (1.0f / 200.0f) * x * x;
 	}
 	
 	/*

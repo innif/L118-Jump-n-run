@@ -14,5 +14,5 @@ uniform vec2 screenSize;
 void main()
 {
 	vs_out.uvs = texCoords;
-	gl_Position = ((position + translation) / vec4(screenSize / 2.0, 1.0, 1.0)) - vec4(1.0, 1.0, 0.0, 0.0);
+	gl_Position = ((position + vec4(translation, 0.0f, 0.0f)) / vec4(screenSize / 2.0, 1.0, 1.0)) - vec4(1.0, 1.0, 0.0, 0.0);
 }

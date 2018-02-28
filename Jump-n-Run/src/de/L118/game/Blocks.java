@@ -63,7 +63,7 @@ public class Blocks {
 	
 	public void draw(WorldRenderer renderer) {
 		if(type != 0) {
-			renderer.drawBlock(body.getPosition().x * World.TILESIZE, body.getPosition().y * World.TILESIZE, sizeX * World.TILESIZE, sizeY * World.TILESIZE, tileset, type);
+			renderer.drawBlock(x * World.TILESIZE, y * World.TILESIZE, sizeX * World.TILESIZE, sizeY * World.TILESIZE, tileset, type);
 		}
 	}
 	
