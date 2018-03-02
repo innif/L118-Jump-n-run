@@ -105,15 +105,20 @@ public abstract class Entity {
 	
 	public void updateEntity() {
 		
+		System.out.println("does sth else");
 		if(isDead)
 			return;
 		
-		if(y+height < 0)
+		if(getY()+getHeight() < 0) {
 			isDead = true;
+			kill();
+			System.out.println("dead");
+		}
 		
 		update();
 	}
 	
+	abstract public void kill();
 	abstract public void update();
 	
 	public void drawEntity(WorldRenderer renderer) {
@@ -124,29 +129,5 @@ public abstract class Entity {
 	}
 	
 	abstract public void draw(WorldRenderer renderer);
-	
-	/*
-		2 := Moved Right
-		1 := Block Right
-		0 := No Motion
-		-1 := Block Left
-		-2 := Moved Left
-	
-	 */
-	public void moveRightLeft(float velocity) {
-	
-	}
-	
-	/*
-		2 := Travelled up
-		1 := Above block
-		0 := Velocity = 0
-		-1 := Below block
-		-2 := Travelled down
-	 */
-	
-	public void moveUpDown(float velocity) {
-	
-	}
 	
 }

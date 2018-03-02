@@ -1,6 +1,7 @@
 package de.L118.game;
 
 import de.L118.game.entitys.Entity;
+import de.L118.game.state.GameState;
 import graphics.Texture;
 import graphics.renderer.SpriteRenderer;
 import graphics.renderer.world.WorldRenderer;
@@ -57,6 +58,11 @@ public class Player extends Entity{
 		fixtureDef.userData = this;
 		body.createFixture(fixtureDef);
 		
+	}
+	
+	@Override
+	public void kill() {
+		GameState.currentState = new GameState();
 	}
 	
 	private void scale(Vec2[] points) {

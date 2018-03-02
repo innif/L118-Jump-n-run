@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import org.jbox2d.common.Vec2;
 
 import de.L118.game.entitys.Entity;
-import de.L118.game.entitys.items.base.IItem;
-import de.L118.game.entitys.items.base.TestItem;
-import de.L118.game.entitys.items.ingame.Item;
 import graphics.renderer.world.WorldRenderer;
 import utils.storage.map.MapStruct;
 
@@ -29,7 +26,6 @@ public class World {
 	{
 		currentWorld = this;
 		this.world = new org.jbox2d.dynamics.World(new Vec2(0.0f,-20f));
-		this.world.setContactListener(new IContactListener());
 		
 		blocks = mapInfo.blocks;
 		entities = new ArrayList<>();
@@ -46,17 +42,7 @@ public class World {
 		xPos = 0.0f;
 		yPos = 0.0f;
 		
-		//IItem testItem = new TestItem();
-		//Item  item     = new Item(this, 2, 1, 1, 1, testItem.getID());
-		//item.setMoving(true);
-		//entities.add(item);
-		
 		renderer = new WorldRenderer();
-	}
-	
-	public void onPickup(Item item, Player p) {
-		item.onPickup(p);
-		entities.remove(item);
 	}
 	
 	public boolean isObject(int x, int y) {
@@ -84,7 +70,10 @@ public class World {
 	}
 	
 	public void update() {
-		entities.forEach(Entity::updateEntity);
+		
+		for (Entity entity : entities) {
+			entity.updateEntity();
+		}
 		world.step(1.0f / 60.0f, 6, 2);
 	}
 	
@@ -114,6 +103,10 @@ public class World {
 		}else {
 			return blocks[collisionLayer][x][y];
 		}
+	}
+	
+	public void addEntity(Entity entity) {
+		entities.add(entity);
 	}
 	
 	public org.jbox2d.dynamics.World getWorld() {

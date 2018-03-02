@@ -16,6 +16,7 @@ public class GameState extends State
 	{
 		w = new World(Config.getMap(new File("res/maps/level1.json")));
 		p = new Player(w);
+		w.addEntity(p);
 	}
 	
 	public void render()
@@ -26,7 +27,6 @@ public class GameState extends State
 	
 	public void update()
 	{
-		p.update();
 		//p.jump();
 		
 		w.update();

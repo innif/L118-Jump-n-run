@@ -20,6 +20,7 @@ public class GUIElement {
 
 	private boolean isMouseOver;
 	private boolean lastMouseOver;
+	protected boolean isHold;
 	
 	private List<GUICallback> callbacks = new ArrayList<>();
 	
@@ -30,6 +31,7 @@ public class GUIElement {
 		this.width = width;
 		this.height = height;
 		this.color = Color.GRAY;
+		isHold = false;
 	}
 	
 	public void render()
@@ -51,7 +53,7 @@ public class GUIElement {
 		
 		if (isMouseOver)
 		{
-			if (Input.isButtonPressed(0))
+			if (Input.isButtonReleased(0))
 			{
 				for (GUICallback guiCallback : callbacks)
 				{
@@ -59,6 +61,8 @@ public class GUIElement {
 				}
 			}
 		}
+		
+		isHold = isMouseOver && Input.isButtonDown(0);
 		
 		lastMouseOver = isMouseOver;
 		onUpdate();
