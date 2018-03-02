@@ -1,5 +1,6 @@
 package de.L118.game.entitys.items.ingame;
 
+import de.L118.game.Player;
 import de.L118.game.World;
 import de.L118.game.entitys.Entity;
 import de.L118.game.entitys.items.base.IItem;
@@ -10,9 +11,7 @@ import java.util.Random;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.*;
 
 public class Item extends Entity {
 	
@@ -38,19 +37,28 @@ public class Item extends Entity {
 		this.tilesetID = item.getTilesetID();
 		fallspeed = DEFAULT_FALLSPEED;
 		
+	}
+	
+	@Override
+	protected void createBody() {
+		
 		PolygonShape polygonShape = new PolygonShape();
-		polygonShape.setAsBox(1, 1);
+		polygonShape.setAsBox(width, height);
 		
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DYNAMIC;
-		bodyDef.position.set(5 * 1, 0);
-		bodyDef.angle = (float) (Math.PI / 4 * 1);
-		bodyDef.allowSleep = false;
-		System.out.println(world.getWorld());
-		Body body = world.getWorld().createBody(bodyDef);
-		body.createFixture(polygonShape, 5.0f);
+		bodyDef.position.set(x, y);
 		
-		body.applyForce(new Vec2(-10000 * (1 - 1), 0), new Vec2());
+		body = world.getWorld().createBody(bodyDef);
+		FixtureDef fixture = new FixtureDef();
+		fixture.shape = polygonShape;
+		fixture.density = 5.0f;
+		fixture.userData = this;
+		//fixture.filter.maskBits = 0x0000;
+		
+		body.createFixture(fixture);
+		
+		
 	}
 	
 	public void setMovingInRandomDir() {
@@ -64,6 +72,12 @@ public class Item extends Entity {
 		this.direction = direction;
 		moves = true;
 		
+	}
+	
+	public void onPickup(Player p) {
+		IItem.getItemByID(id).onPickup(p);
+		body.getWorld().destroyBody(body);
+		this.isDead = true;
 	}
 	
 	@Override
@@ -88,104 +102,4 @@ public class Item extends Entity {
 		body.setLinearVelocity(new Vec2(VELOCITY, body.getLinearVelocity().y));
 	}
 	
-	/*
-	
-	public Item(float x, float y, short id, World world) {
-		
-		this.world = world;
-		fallspeed = DEFAULT_FALLSPEED;
-		this.sizeX = item.getSizeX();
-		this.sizeY = item.getSizeY();
-		this.x = x;
-		this.y = y;
-		
-	}
-	
-	
-	public float getX() {
-		
-		return x;
-	}
-	
-	public float getY() {
-		
-		return y;
-	}
-	
-	public int getSizeX() {
-		
-		return sizeX;
-	}
-	
-	public int getSizeY() {
-		
-		return sizeY;
-	}
-	
-	public void draw(WorldRenderer renderer) {
-	
-	}
-	
-	public void update() {
-	
-	}
-	
-	private void fall() {
-		
-		if (!isOnBlock()) {
-			if(fallspeed < 0) {
-				if(isUnderBlock()) {
-					fallspeed = 0;
-				} else {
-					y -= fallspeed;
-					fallspeed += ACCELERATION;
-				}
-			} else {
-				y -= fallspeed;
-				fallspeed += ACCELERATION;
-			}
-		} else {
-			fallspeed = DEFAULT_FALLSPEED;
-		}
-	}
-	
-	private void moveLR() {
-		
-		if (direction) {
-			if(!isBlockRight())
-				x += VELOCITY;
-			else
-				direction = !direction;
-		} else {
-			if(!isBlockLeft())
-				x -= VELOCITY;
-			else
-				direction = !direction;
-		}
-		
-	}
-	
-	public boolean isOnBlock() {
-		
-		return world.blockAt((int) Math.round(x - 0.5), (int) (y)).isBlock() ||
-				world.blockAt((int) Math.round(x + 0.5), (int) (y)).isBlock();
-	}
-	
-	private boolean isUnderBlock() {
-		return 	world.blockAt((int)Math.round(x-0.5), (int)(y +1)).isBlock() ||
-				world.blockAt((int)Math.round(x+0.5), (int)(y +1)).isBlock();
-	}
-	
-	private boolean isBlockRight() {
-		return 	world.blockAt((int)Math.round(x+1), (int)Math.round(y)).isBlock();
-	}
-	
-	private boolean isBlockLeft() {
-		return 	world.blockAt((int)Math.round(x-1), (int)Math.round(y)).isBlock();
-	}
-	
-	public short getID() {
-		
-		return id;
-	}*/
 }

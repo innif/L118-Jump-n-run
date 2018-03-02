@@ -18,6 +18,7 @@ public class World {
 	public float xPos;
 	public float yPos;
 	
+	public static World currentWorld;
 	private org.jbox2d.dynamics.World world;
 	
 	private ArrayList<Entity> entities;
@@ -26,7 +27,9 @@ public class World {
 	
 	public World(MapStruct mapInfo)
 	{
+		currentWorld = this;
 		this.world = new org.jbox2d.dynamics.World(new Vec2(0.0f,-20f));
+		this.world.setContactListener(new IContactListener());
 		
 		blocks = mapInfo.blocks;
 		entities = new ArrayList<>();
@@ -43,12 +46,17 @@ public class World {
 		xPos = 0.0f;
 		yPos = 0.0f;
 		
-		IItem testItem = new TestItem();
-		Item  item     = new Item(this, 2, 1, 1, 1, testItem.getID());
-		item.setMoving(true);
-		entities.add(item);
+		//IItem testItem = new TestItem();
+		//Item  item     = new Item(this, 2, 1, 1, 1, testItem.getID());
+		//item.setMoving(true);
+		//entities.add(item);
 		
 		renderer = new WorldRenderer();
+	}
+	
+	public void onPickup(Item item, Player p) {
+		item.onPickup(p);
+		entities.remove(item);
 	}
 	
 	public boolean isObject(int x, int y) {

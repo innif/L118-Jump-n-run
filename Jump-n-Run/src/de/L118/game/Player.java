@@ -6,11 +6,15 @@ import graphics.renderer.SpriteRenderer;
 import graphics.renderer.world.WorldRenderer;
 import utils.input.Input;
 
+import org.jbox2d.callbacks.ContactImpulse;
+import org.jbox2d.callbacks.ContactListener;
+import org.jbox2d.collision.Manifold;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
+import org.jbox2d.dynamics.contacts.Contact;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
@@ -50,6 +54,7 @@ public class Player extends Entity{
 		fixtureDef.density = 0.0f;
 		fixtureDef.friction = 0.0f;
 		fixtureDef.restitution = 0.0f;
+		fixtureDef.userData = this;
 		body.createFixture(fixtureDef);
 		
 	}

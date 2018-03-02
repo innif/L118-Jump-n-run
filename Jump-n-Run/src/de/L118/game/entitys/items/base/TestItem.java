@@ -22,6 +22,7 @@ public class TestItem extends IItem {
 	
 	@Override
 	public void onPickup(Player p) {
-	
+		
+		System.out.println("Coin");
 	}
 }
