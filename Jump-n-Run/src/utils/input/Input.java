@@ -14,31 +14,31 @@ public class Input
 {
 	
 	/**
-	 * [Beschreibung]
+	 * Anzahl aller Tasten
 	 */
 	private static int keyCount = 256;
 	/**
-	 * [Beschreibung]
+	 * Anzahl der Maustasten
 	 */
 	private static int buttonCount = 3;
 	
 	/**
-	 * [Beschreibung]
+	 * Zustaende der einzelnen Knoepfe
 	 */
 	private static boolean[] keyStates = new boolean[keyCount];
 	/**
-	 * [Beschreibung]
+	 * Zustaende der Maustasten
 	 */
 	private static boolean[] buttonStates= new boolean[buttonCount];
 	
 	
 	/**
-	 * [Beschreibung]
+	 * Abfrage, ob eine Taste gedrueckt und wieder losgelassen wurde
 	 *
 	 * @param key
-	 * 		[Beschreibung der Paramters]
+	 * 		Nummer der abzufragenden Taste
 	 * @return
-	 * 		[Beschreibung, was zurückgegeben wird]
+	 * 		boolean mit Zustand false fuer nicht gedrueckt
 	 */
 	public static boolean isKeyPressed(int key)
 	{
@@ -46,12 +46,12 @@ public class Input
 	}
 	
 	/**
-	 * [Beschreibung]
+	 * Abfraeg, ob eine Taste gerade gedrueckt wird
 	 *
 	 * @param key
-	 * 		[Beschreibung der Paramters]
+	 * 		Nummer der abzufragenden Taste
 	 * @return
-	 * 		[Beschreibung, was zurückgegeben wird]
+	 * 		boolean mit Zustand false fuer gerade nicht gedrueckt
 	 */
 	public static boolean isKeyDown(int key)
 	{
@@ -59,12 +59,12 @@ public class Input
 	}
 	
 	/**
-	 * [Beschreibung]
+	 * Abfrage, ob eine Taste gerade losgelassen wurde
 	 *
 	 * @param key
-	 * 		[Beschreibung der Paramters]
+	 * 		Nummer der abzufragenden Taste
 	 * @return
-	 * 		[Beschreibung, was zurückgegeben wird]
+	 * 		boolean mit Zustand false fuer gerade nicht losgelassen
 	 */
 	public static boolean isKeyReleased(int key)
 	{
@@ -72,12 +72,12 @@ public class Input
 	}
 	
 	/**
-	 * [Beschreibung]
+	 * Abfrage, ob ein Mousebutton gerade gedrueckt und wieder losgelassen wurde
 	 *
 	 * @param button
-	 * 		[Beschreibung der Paramters]
+	 * 		Nummer des entsprechenden Mousebuttons
 	 * @return
-	 * 		[Beschreibung, was zurückgegeben wird]
+	 * 		boolean mit Zustand false fuer gerade nicht gedrueckt
 	 */
 	public static boolean isButtonPressed(int button)
 	{
@@ -85,12 +85,12 @@ public class Input
 	}
 	
 	/**
-	 * [Beschreibung]
+	 * Abfrage, ob eine Mousetaste gerade gedrueckt wird
 	 *
 	 * @param button
-	 * 		[Beschreibung der Paramters]
+	 * 		Nummer des entsprechenden Mousebuttons
 	 * @return
-	 * 		[Beschreibung, was zurückgegeben wird]
+	 * 		boolean mit Zustand false fuer gerade nicht gedrueckt
 	 */
 	public static boolean isButtonDown(int button)
 	{
@@ -98,12 +98,12 @@ public class Input
 	}
 	
 	/**
-	 * [Beschreibung]
+	 * Abfrage, ob ein Mousebutton gerade losgelassen wurde
 	 *
 	 * @param button
-	 * 		[Beschreibung der Paramters]
+	 * 		Nummer des entsprechenden Mousebuttons
 	 * @return
-	 * 		[Beschreibung, was zurückgegeben wird]
+	 * 		boolean mit Zustand false fuer gerade nicht losgelassen
 	 */
 	public static boolean isButtonReleased(int button)
 	{
@@ -111,10 +111,10 @@ public class Input
 	}
 	
 	/**
-	 * [Beschreibung]
+	 * Methode zur Ermittlung der Cursor-Position im Window
 	 *
 	 * @return
-	 * 		[Beschreibung, was zurückgegeben wird]
+	 * 		Vec2f mit x,y - Position des Cursors
 	 */
 	public static Vector2f getMousePosition()
 	{
@@ -122,7 +122,7 @@ public class Input
 	}
 	
 	/**
-	 * [Beschreibung]
+	 * Update-Methode, die die Werte aller Tasten&Button aktualisiert
 	 *
 	 */
 	public static void update(){

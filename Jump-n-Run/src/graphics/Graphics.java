@@ -17,7 +17,7 @@ public class Graphics {
 	 * @param width of the window
 	 * @param height of the window
 	 * @param title of the window
-	 * @param fullscreen - wether the window is in fullscreen mode or not
+	 * @param fullscreen - whether the window is in fullscreen mode or not
 	 */
 	public static void createWindow(int width, int height, String title, boolean fullscreen)
 	{
@@ -53,7 +53,7 @@ public class Graphics {
 	
 	/**
 	 * 
-	 * @return wether the window is still alive or not 
+	 * @return whether the window is still alive or not 
 	 */
 	public static boolean windowOpen()
 	{
