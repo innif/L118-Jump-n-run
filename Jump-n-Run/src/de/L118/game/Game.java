@@ -16,10 +16,15 @@ import utils.input.Input;
  *	Game-loop, update- and render-methode in dieser klasse
  */
 public class Game {
-
-	private boolean running;
-	long timer;
 	
+	/**
+	 * Ob das Spiel läuft oder nicht
+	 */
+	private boolean running;
+	
+	/**
+	 * Erstellt ein neues Spiel objekt
+	 */
 	public Game()
 	{
 		

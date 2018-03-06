@@ -1,8 +1,18 @@
 package de.L118;
 
 import de.L118.game.Game;
-public class Starter {
 
+/**
+ * Startet das Spiel
+ */
+public class Starter {
+	
+	/**
+	 * Startet das Spiel
+	 *
+	 * @param args
+	 * 		Cmd übergebene Argumente
+	 */
 	public static void main(String[] args)
 	{
 		

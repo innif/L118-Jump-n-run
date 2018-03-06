@@ -20,13 +20,31 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 
+/**
+ * Objekt des Spielers
+ *
+ * @author Finn
+ * @author Luca
+ * @author Stefan
+ * @version 1.0
+ */
 public class Player extends Entity{
 	
+	/**
+	 * Welt in der sich der Spieler befindet
+	 */
 	private World w;
+	/**
+	 * Textur des Spielers
+	 */
 	private Texture texture;
 	
-	public static final int DISPLAY_POS = 2;
-	
+	/**
+	 * Erzeugt den Spieler
+	 *
+	 * @param w
+	 * 		Welt des Spielers
+	 */
 	public Player(World w) {
 		super(10f,7,w,1,1);
 		this.w = w;
@@ -34,6 +52,9 @@ public class Player extends Entity{
 	}
 	
 	@Override
+	/**
+	 * Erzeugt die JBox2D hitbox des Spielers
+	 */
 	protected void createBody()
 	{
 		BodyDef def = new BodyDef();
@@ -66,11 +87,6 @@ public class Player extends Entity{
 		fixtureDef.userData = this;
 		body.createFixture(fixtureDef);
 		
-	}
-	
-	@Override
-	public void kill() {
-		GameState.currentState = new GameState();
 	}
 	
 	private void scale(Vec2[] points) {
@@ -114,24 +130,49 @@ public class Player extends Entity{
 		//w.setxPos((getX()- 12f)* World.TILESIZE);
 	}
 	
+	@Override
+	/**
+	 * Wirf aufgerufen, wenn der Spieler stirbt
+	 */
+	public void kill() {
+		GameState.currentState = new GameState();
+	}
+	
+	/**
+	 *
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param d
+	 * @param value
+	 * @return
+	 */
 	public float map(float a, float b, float c, float d, float value)
 	{
 		//Y = (X-A)/(B-A) * (D-C) + C
 		return (value - a) / (b - a) * (d - c) + c;
 	}
 	
-	public float getWorldAdvanceMultiplier(float x)
+	/**
+	 * Magic value, sollte die Geschwindigkeit der Kamerabewegung ändern
+	 *
+	 * @param x
+	 * 		Position des Spielers relativ zum Fenster
+	 * @return
+	 * 		Magic value
+	 */
+	private float getWorldAdvanceMultiplier(float x)
 	{
 		return (200.0f / 1.0f) * x * x;
 	}
 	
-	/*
-		4.6f ~ 2 Blöcke
-		6.5f ~ 3 Blöcke
-	
+	/**
+	 * Lässt den Spieler einen Stomp ausführen
+	 *
+	 * @param vel
+	 * 		Geschwindigkeit des Stomps
 	 */
-	
-	public void stomp(float vel) {
+	private void stomp(float vel) {
 		
 		if (jumpState == JumpState.JUMPING || jumpState == JumpState.FALLING)
 		{
@@ -140,7 +181,13 @@ public class Player extends Entity{
 		}
 	}
 	
-	public void jump(float vel)
+	/**
+	 * Lässt den Spieler springen
+	 *
+	 * @param vel
+	 * 		Geschwindigkeit des Sprungs
+	 */
+	private void jump(float vel)
 	{
 		if (jumpState == JumpState.ONGROUND)
 		{
@@ -150,11 +197,23 @@ public class Player extends Entity{
 		//body.applyForceToCenter(new Vec2(0.0f, vel));
 	}
 	
-	public void move(float vel) {
+	/**
+	 * Bewegt den Spieler nach rechts bzw links
+	 *
+	 * @param vel
+	 * 		Geschwindigkeit des Spielers
+	 */
+	private void move(float vel) {
 		body.applyLinearImpulse(new Vec2(vel - body.getLinearVelocity().x, 0.0f), body.getWorldCenter());
 		//body.setLinearVelocity(new Vec2(vel,body.getLinearVelocity().y));
 	}
 	
+	/**
+	 * Wird aufgerufen um den Spieler zu zeichnen
+	 *
+	 * @param renderer
+	 * 		Hier egal
+	 */
 	public void draw(WorldRenderer renderer) {
 		
 		SpriteRenderer.drawSprite((getX() * World.TILESIZE) - w.xPos, (getY() * World.TILESIZE) - w.yPos, getWidth() * World.TILESIZE, getHeight() * World.TILESIZE, texture, null);

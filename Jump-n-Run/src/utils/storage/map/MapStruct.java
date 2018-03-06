@@ -17,7 +17,7 @@ public class MapStruct {
 	public List<Tileset> tilesets;
 	/**
 	 * Array für alle Blöcke auf der Map
-	 * x,y,layer als index
+	 * Ebene,x,y als index
 	 */
 	public Blocks[][][] blocks;
 	/**
