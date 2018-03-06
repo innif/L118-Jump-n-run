@@ -42,7 +42,7 @@ public class Game {
 	}
 	
 	/**
-	 * Alle daten l�schen
+	 * Alle daten löschen
 	 */
 	private void cleanUp()
 	{
@@ -84,7 +84,7 @@ public class Game {
 	
 	/**
 	 * 
-	 * Schlie�t das Spiel
+	 * Schließt das Spiel
 	 * 
 	 */
 	public void stop()
