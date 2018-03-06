@@ -89,6 +89,11 @@ public class Player extends Entity{
 		
 	}
 	
+	/**
+	 * Skaliert jeden 2 Diemensionalen Vektor in übergebenem Array basierend auf der Größe des Spielerrs
+	 * @param points
+	 * 		Vektoren, die Skaliert werden sollen
+	 */
 	private void scale(Vec2[] points) {
 		for(int i = 0; i < points.length; i++) {
 			points[i].x *= getWidth();
@@ -96,6 +101,9 @@ public class Player extends Entity{
 		}
 	}
 	
+	/**
+	 * Methode die Oprtimalerweise 60x pro sekunde aufgerufen wird und den Spieler updated
+	 */
 	public void update() {
 		
 		move(0.0f);
@@ -132,7 +140,7 @@ public class Player extends Entity{
 	
 	@Override
 	/**
-	 * Wirf aufgerufen, wenn der Spieler stirbt
+	 * Wird aufgerufen, wenn der Spieler stirbt
 	 */
 	public void kill() {
 		GameState.currentState = new GameState();

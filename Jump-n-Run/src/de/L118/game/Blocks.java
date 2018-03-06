@@ -78,7 +78,7 @@ public class Blocks {
 	 * @param world
 	 * 		Welt in der der Block steht
 	 */
-	private void createPhysics(World world)
+	protected void createPhysics(World world)
 	{
 		BodyDef def = new BodyDef();
 		def.type = BodyType.STATIC;
