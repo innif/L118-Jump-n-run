@@ -1,14 +1,12 @@
 package graphics.renderer.font;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.File;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
 
 import graphics.Texture;
+import utils.storage.Config;
 
 public class Font
 { 
@@ -35,8 +33,8 @@ public class Font
 	
 	/**
 	 * 
-	 * @param name - the path of the font without file-ending. Font file with .fnt and font image with .png
-	 * @param size - the size of the font
+	 * @param name - Der Pfad zur Font-Datei ohne dateiendung. Bei der font datei wird .fnt und bei der Bild datei -png angehängt
+	 * @param size - Die größe der Font
 	 */
 	public Font(String name, float size)
 	{
@@ -45,11 +43,23 @@ public class Font
 		loadFont(name + ".fnt");
 	}
 	
+	/**
+	 * Findet ein Wert in der momentanigen Zeile
+	 * 
+	 * @param name - Der Name des Wertes
+	 * @return Der Wert der Variable aus der .fnt Datei
+	 */
 	private int getValue(String name)
 	{
 		return Integer.parseInt(values.get(name));
 	}
 	
+	/**
+	 * Findet mehrere Werte in der momentanigen Zeile
+	 * 
+	 * @param name - Der Name des Wertes
+	 * @return Das Array aus Werten der Variable aus der .fnt Datei
+	 */
 	private int[] getValues(String name)
 	{
 		String s = values.get(name);
@@ -60,15 +70,23 @@ public class Font
 		return result;
 	}
 	
+	/**
+	 * Läd eine .fnt Datei
+	 * @param path
+	 */
 	private void loadFont(String path)
 	{
-		String content = loadFile(path);
+		String content = Config.readFileAsString(new File(path));
 		String[] lines = content.split("\n");
 		for (String line : lines) {
 			processLine(line);
 		}
 	}
 	
+	/**
+	 * 
+	 * @param line - Momentanige Zeile
+	 */
 	private void processLine(String line)
 	{
 		storeValues(line);
@@ -88,6 +106,10 @@ public class Font
 		}
 	}
 	
+	/**
+	 * Läd die daten eines char's
+	 * @param textureSize - Die größe der Textur in Pixel
+	 */
 	private void loadChar(int textureSize)
 	{
 		int id = getValue("id");
@@ -104,6 +126,10 @@ public class Font
 		glyphs.put(id, new Glyph(id, xTex, yTex, xTexSize, yTexSize, xOff, yOff, width, height, xAdvance));
 	}
 	
+	/**
+	 * Liest eine Zeile und Spiechert alle Werte
+	 * @param line - Die momentanige Zeile
+	 */
 	private void storeValues(String line)
 	{
 		String[] args = line.split("\\s+");
@@ -114,29 +140,14 @@ public class Font
 		}
 	}
 	
-	private String loadFile(String path)
-	{
-		StringBuilder builder = new StringBuilder();
-		
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(path));
-			String line = "";
-			while ((line = reader.readLine()) != null)
-			{
-				builder.append(line + "\n");
-			}
-			reader.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return builder.toString();
-	}
-	
 	private static final int QUAD_SIZE = 6 * 4;
 	
+	/**
+	 * Läd alle Punkte des Text-Meshes
+	 * 
+	 * @param text - Der Text
+	 * @return die Punkte in einem float-array
+	 */
 	public float[] getVertices(String text)
 	{
 		float[] result = new float[text.length() * QUAD_SIZE];
@@ -159,17 +170,23 @@ public class Font
 		return result;
 	}
 	
+	/**
+	 * Speichert die Daten eines BEstimmten char's
+	 * 
+	 * @param array - Das Punkte-Array zum speichern
+	 * @param index - Der momentanige index in dem Array 
+	 * @param g - Der Charakter welcher hinzugefügt werden muss
+	 * @param cursorX - Die Cursor X-Position
+	 * @param cursorY - Die Cursor Y-Position
+	 * @param fontSize - Die Font Größe zum Skalieren der Schrift
+	 */
 	private void storeDataInArray(float[] array, int index, Glyph g, float cursorX, float cursorY, float fontSize)
 	{
 		float x = cursorX + (g.getxOffset() * fontSize);
 		float y = cursorY - ((g.getyOffset() - lineHeight) * fontSize);
 		float maxX = x + (g.getSizeX() * fontSize);
 		float maxY = y - ((g.getSizeY()) * fontSize);
-//		float properX = (2 * x) - 1;
-//		float properY = (-2 * y) + 1;
-//		float properMaxX = (2 * maxX) - 1;
-//		float properMaxY = (-2 * maxY) + 1;
-		
+
 		array[index * QUAD_SIZE + 0] = x;
 		array[index * QUAD_SIZE + 1] = y;
 		array[index * QUAD_SIZE + 2] = g.getxTextureCoord();
@@ -201,6 +218,11 @@ public class Font
 		array[index * QUAD_SIZE + 23] = g.getyTextureCoord();
 	}
 	
+	/**
+	 * 
+	 * @param text - Der Text
+	 * @return Breite des Textes in Pixel
+	 */
 	public float getTextWidth(String text)
 	{
 		float result = 0.0f;
@@ -214,16 +236,29 @@ public class Font
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @param ascii ASCII-Char Wert
+	 * @return Der Glyph für ein char
+	 */
 	public Glyph getGlyph(int ascii)
 	{
 		return glyphs.get(ascii);
 	}
 	
+	/**
+	 * 
+	 * @return Die Schrift-Textur
+	 */
 	public Texture getTexture() 
 	{
 		return texture;
 	}
 	
+	/**
+	 * 
+	 * @return Die Schriftgröße
+	 */
 	public float getSize() {
 		return size;
 	}

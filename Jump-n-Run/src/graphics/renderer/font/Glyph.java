@@ -1,5 +1,13 @@
 package graphics.renderer.font;
 
+
+/**
+ * 
+ * @author james_000
+ *
+ *
+ *Speichert alle daten eines char's zum Erstellen eines Text-Meshes
+ */
 public class Glyph {
 	
 	private int id;

@@ -20,6 +20,11 @@ public class Texture {
 	private int filterMode;
 	private int[] data;
 	
+	/**
+	 * Erstellt eine neue Textur
+	 * 
+	 * @param path - Pfad zu der Bild-Datei
+	 */
 	public Texture(String path)
 	{
 		int[] pixels = null;
@@ -50,6 +55,12 @@ public class Texture {
 		filterMode = GL11.GL_NEAREST;
 	}
 	
+	
+	/**
+	 * 
+	 * @param path - Pfad zu der Bild-Datei
+	 * @param filterMode - Der Modus in welchem das Bild skalliert wird, GL11.GL_NEAREST or GL11.GL_LINIEAR
+	 */
 	public Texture(String path, int filterMode)
 	{
 		int[] pixels = null;
@@ -80,6 +91,11 @@ public class Texture {
 		this.filterMode = filterMode;
 	}
 	
+	/**
+	 * Erstellt die OpenGL-Textur
+	 * 
+	 * @param filterMode - Der Modus in welchem das Bild skalliert wird, GL11.GL_NEAREST or GL11.GL_LINIEAR
+	 */
 	private void create(int filterMode)
 	{
 		id = GL11.glGenTextures();
@@ -92,7 +108,13 @@ public class Texture {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 	}
 	
-	
+	/**
+	 * 
+	 * Erzeug einen IntBuffer und speichert Daten in diesem 
+	 * 
+	 * @param data - Die daten für den IntBuffer
+	 * @return Den neu erstellten IntBuffer
+	 */
 	private static IntBuffer storeDataInIntBuffer(int[] data)
 	{
 		IntBuffer result = BufferUtils.createIntBuffer(data.length);
@@ -102,7 +124,7 @@ public class Texture {
 	}
 	
 	/**
-	 * @return the ID of the texture
+	 * @return Die OpenGL-ID der Textur
 	 */
 	public int getID() {
 		return id;
@@ -111,7 +133,7 @@ public class Texture {
 	
 	/**
 	 * 
-	 * @return width of the texture in pixel
+	 * @return Breite der Textur in Pixel
 	 */
 	public int getWidth()
 	{
@@ -120,7 +142,7 @@ public class Texture {
 	
 	/**
 	 * 
-	 * @return height of the texture in pixel
+	 * @return Höhe der Texture in Pixel
 	 */
 	public int getHeight()
 	{
@@ -128,9 +150,9 @@ public class Texture {
 	}
 	
 	/**
-	 * @param slot - The opengl-slot the texture is binding to
+	 * Bindet eine Textur an einen bestimmten OpenGL-Slot
 	 * 
-	 * <p>Bind the texture for rendering
+	 * @param slot - Der Textur-Slot in welcher die Textur gebunden werden soll
 	 */
 	public void bind(int slot)
 	{
@@ -140,6 +162,11 @@ public class Texture {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
 	}
 	
+	/**
+	 * Löst eine Textur von einem bestimmten OpenGL-Slot
+	 * 
+	 * @param slot - Der Textur-Slot in welcher die Textur gebunden werden soll
+	 */
 	public void unbind(int slot)
 	{
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + slot);

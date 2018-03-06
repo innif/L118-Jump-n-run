@@ -12,6 +12,9 @@ public class TextShader extends ShaderProgram
 	public UniformVec2 screenSize = new UniformVec2("screenSize");
 	public UniformVec2 translation = new UniformVec2("translation");
 	
+	/**
+	 * Erstellt einen Standart Text-Shader
+	 */
 	public TextShader()
 	{
 		super("shaders/text.vert", "shaders/text.frag");

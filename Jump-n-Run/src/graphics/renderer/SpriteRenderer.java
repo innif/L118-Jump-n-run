@@ -73,7 +73,7 @@ public class SpriteRenderer {
 	}
 	
 	/**
-	 * Cleans up the renderer
+	 * Löscht alle daten des SpriteRenderers
 	 */
 	public static void cleanUp()
 	{
@@ -86,16 +86,16 @@ public class SpriteRenderer {
 	
 	/**
 	 * 
+	 * Zeichnet ein einzelne Textur
+	 * 
 	 * @param x - x position
 	 * @param y - y position
-	 * @param width - width of the sprite
-	 * @param height - height of the sprite
-	 * @param texture - texture of the sprite
-	 * @param spriteShader - the shader to use for the Sprite.
-	 * 				If null it uses the default shader
+	 * @param width - Breite des Sprites
+	 * @param height - Höe des Sprites
+	 * @param texture - Textur des Sprites
+	 * @param spriteShader - Der zu benutzende Shader beim Rendern
+	 * 				Der Standart-Shader wird verwendet fals die auf null gesetzt wird
 	 * 
-	 * <p>
-	 * draws a single image with the default shader
 	 */
 	public static void drawSprite(float x, float y, float width, float height, Texture texture, SpriteShader spriteShader)
 	{
@@ -124,16 +124,16 @@ public class SpriteRenderer {
 
 	/**
 	 * 
+	 * Zeichnet ein einzelnes farbiges Sprite
+	 * 
 	 * @param x - x position
 	 * @param y - y position
-	 * @param width - width of the sprite
-	 * @param height - height of the sprite
-	 * @param color - color of the sprite
-	 * @param colorShader - the shader to use for the Sprite.
-	 * 				If null it uses the default shader
+	 * @param width - Breite des Sprites
+	 * @param height - Höe des Sprites
+	 * @param texture - Textur des Sprites
+	 * @param spriteShader - Der zu benutzende Shader beim Rendern
+	 * 				Der Standart-Shader wird verwendet fals die auf null gesetzt wird
 	 * 
-	 * <p>
-	 * draws a single image with the default shader
 	 */
 	public static void drawSprite(float x, float y, float width, float height, Color color, ColorShader colorShader)
 	{

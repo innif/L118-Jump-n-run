@@ -10,6 +10,9 @@ public class WorldShader extends ShaderProgram
 	public UniformVec2 worldOffset = new UniformVec2("worldOffset");
 	public UniformSamplerArray samplers = new UniformSamplerArray("textures", 32);
 	
+	/**
+	 * Erstellt einen Standart World-Shader
+	 */
 	protected WorldShader()
 	{
 		super("shaders/world.vert", "shaders/world.frag");

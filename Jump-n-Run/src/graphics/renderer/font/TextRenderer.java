@@ -8,22 +8,38 @@ public class TextRenderer
 {
 	private static TextShader shader;
 	
+	/**
+	 * Initialisierung des TextRenderers
+	 */
 	public static void init()
 	{
 		shader = new TextShader();
 	}
 	
+	/**
+	 * Löschen der Daten des TextRenderers
+	 */
 	public static void cleanUp()
 	{
 		shader.cleanUp();
 	}
 	
+	/**
+	 * Zeichnet eine Text auf den Bildschirm
+	 * Falls die Breite und Höhe größer als 0.1 ist wird der Text ausgeschnitten, falls er mit der Breite und Höhe nicht Überlappt
+	 * 
+	 * @param text - Der zu zeichnende Text
+	 * @param x - Die X-Position des Textes
+	 * @param y - Die Y-Position des Textes
+	 * @param width - Die Breite des Textes
+	 * @param height - Die Breite des Textes
+	 * @param font - Die Font mit welcher der Text gerendert werden soll
+	 */
 	public static void drawString(GUIText text, float x, float y, float width, float height, Font font)
 	{
 		if (width > 0.1f && height > 0.1f)
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		GL11.glScissor((int)x, (int)y, (int)width, (int) height);
-		//GL11.glPolygonMode( GL11.GL_FRONT_AND_BACK, GL11.GL_LINE );
 		shader.start();
 		shader.color.loadVec3(text.getColor());
 		shader.translation.loadVec2(x, y);
@@ -35,9 +51,21 @@ public class TextRenderer
 		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, text.getVertexCount());
 		shader.stop();
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
-		//SpriteRenderer.drawSprite(x, y, 94, 94 * 2, Color.WHITE, null);
 	}
 	
+	/**
+	 * Zeichnet einen Text mit Horizontalen und Verticalen Ausrichtung
+	 * 
+	 * @param text - Der zu zeichnende Text
+	 * @param x - Die X-Position des Textes
+	 * @param y - Die Y-Position des Textes
+	 * @param width - Die Breite des Textes
+	 * @param height - Die Breite des Textes
+	 * @param font - Die Font mit welcher der Text gerendert werden soll
+	 * @param vAlign - Verticale Ausrichtung
+	 * @param hAlign - Horizontale Ausrichtung
+	 * @param scissor - Ob der Text auserhalb der der Box nicht gezeichnet wird
+	 */
 	public static void drawString(GUIText text, float x, float y, float width, float height, Font font, FontAlignmentVertical vAlign, FontAlignmentHorizontal hAlign, boolean scissor)
 	{
 		float xx = x;
@@ -72,7 +100,6 @@ public class TextRenderer
 		if (scissor)
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		GL11.glScissor((int)x, (int)y, (int)width, (int) height);
-		//GL11.glPolygonMode( GL11.GL_FRONT_AND_BACK, GL11.GL_LINE );
 		shader.start();
 		shader.color.loadVec3(text.getColor());
 		shader.translation.loadVec2(xx, yy);
@@ -84,7 +111,6 @@ public class TextRenderer
 		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, text.getVertexCount());
 		shader.stop();
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
-		//SpriteRenderer.drawSprite(x, y, 94, 94 * 2, Color.WHITE, null);
 	}
 	
 }

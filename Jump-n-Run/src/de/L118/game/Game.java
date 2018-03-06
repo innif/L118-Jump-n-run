@@ -42,7 +42,7 @@ public class Game {
 	}
 	
 	/**
-	 * Cleans up the game
+	 * Alle daten löschen
 	 */
 	private void cleanUp()
 	{
