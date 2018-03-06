@@ -13,6 +13,10 @@ public class GameState extends State
 	Player p;
 	World w;
 	
+	/**
+	 * Erzeug eine neues State zum rendern und updaten des Spiels.
+	 * Eine Standartmap wird eingeladen
+	 */
 	public GameState()
 	{
 		w = new World(Config.getMap(new File("res/maps/level1.json")));
@@ -22,18 +26,22 @@ public class GameState extends State
 		s.start();
 	}
 	
+	/**
+	 * Rendern des Spielers und der Welt
+	 */
 	public void render()
 	{
 		w.render();
 		p.draw(null);
 	}
 	
+	/**
+	 * Updaten der welt. 
+	 * Der Spieler wird automatisch in World.java geupdatet
+	 */
 	public void update()
 	{
-		//p.jump();
-		
 		w.update();
-		//p.moveRight(0.1);
 	}
 	
 

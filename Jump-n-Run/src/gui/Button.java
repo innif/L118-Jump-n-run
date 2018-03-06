@@ -10,6 +10,13 @@ import graphics.renderer.font.FontAlignmentVertical;
 import graphics.renderer.font.GUIText;
 import graphics.renderer.font.TextRenderer;
 
+/**
+ * 
+ * @author james_000
+ *
+ *Ein Drückbarer Button
+ *
+ */
 public class Button extends GUIElement
 {
 	public GUIText text;
@@ -29,6 +36,9 @@ public class Button extends GUIElement
 		this.pressedTexture = new Texture("res/textures/Button/Button_pressed.png");
 	}
 	
+	/**
+	 * Zeichnet den Button
+	 */
 	@Override
 	public void render()
 	{

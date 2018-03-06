@@ -9,6 +9,13 @@ import org.lwjgl.util.vector.Vector2f;
 import graphics.renderer.SpriteRenderer;
 import utils.input.Input;
 
+
+/**
+ * 
+ * @author james_000
+ *
+ *Die Basis eines GUI-Element
+ */
 public class GUIElement {
 	
 	private Color color;
@@ -39,6 +46,9 @@ public class GUIElement {
 		SpriteRenderer.drawSprite(x, y, width, height, color, null);
 	}
 	
+	/**
+	 * Updatet das GUI-Element und schaut noch Mauseingaben
+	 */
 	public void update()
 	{
 		Vector2f mouse = Input.getMousePosition();
@@ -70,6 +80,12 @@ public class GUIElement {
 	
 	protected void onUpdate() {}
 
+	/**
+	 * 
+	 * Fügt einen Callback zu dem GUIElement hinzu
+	 * 
+	 * @param callback - Der Callback
+	 */
 	public void addGUICallback(GUICallback callback)
 	{
 		callbacks.add(callback);

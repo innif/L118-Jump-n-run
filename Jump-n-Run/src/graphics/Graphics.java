@@ -14,10 +14,10 @@ public class Graphics {
 
 	/**
 	 * 
-	 * @param width of the window
-	 * @param height of the window
-	 * @param title of the window
-	 * @param fullscreen - wether the window is in fullscreen mode or not
+	 * @param breite des Fensters
+	 * @param höhe des Fensters
+	 * @param Titel des Fensters
+	 * @param fullscreen - ob das Fenster in Vollbild gespielt wird oder nicht
 	 */
 	public static void createWindow(int width, int height, String title, boolean fullscreen)
 	{
@@ -36,7 +36,7 @@ public class Graphics {
 	}
 	
 	/**
-	 * 	Clears all of the window
+	 * 	Löscht den Inhalt des Fensters
 	 */
 	public static void clearWindow()
 	{
@@ -44,7 +44,7 @@ public class Graphics {
 	}
 	
 	/**
-	 * Updates the window buffer and the input
+	 * Updatet den Input und den Renderbuffer des Fensters
 	 */
 	public static void updateWindow()
 	{
@@ -53,7 +53,7 @@ public class Graphics {
 	
 	/**
 	 * 
-	 * @return wether the window is still alive or not 
+	 * @return Ob das Fenster noch offen ist
 	 */
 	public static boolean windowOpen()
 	{
@@ -62,13 +62,13 @@ public class Graphics {
 	
 	/**
 	 * 
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param color
+	 * @param x - X Position des Vierecks
+	 * @param y - Y Position des Vierecks
+	 * @param width - Breite des Vierecks
+	 * @param height - Höhe des Vierecks
+	 * @param color - Farbe des Vierecks
 	 * 
-	 * Fills a colored rect
+	 * Zeichnet ein einfarbiges Viereck
 	 */
 	public static void fillRect(float x, float y, float width, float height, Color color)
 	{
@@ -78,13 +78,13 @@ public class Graphics {
 	
 	/**
 	 * 
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param texture
+	 *  @param x - X Position des Vierecks
+	 * @param y - Y Position des Vierecks
+	 * @param width - Breite des Vierecks
+	 * @param height - Höhe des Vierecks
+	 * @param color - Textur des Vierecks
 	 * 
-	 * Draws a texture
+	 * zeichnet ein texturiertes Viereck
 	 */
 	public static void drawTexture(float x, float y, float width, float height, Texture texture)
 	{

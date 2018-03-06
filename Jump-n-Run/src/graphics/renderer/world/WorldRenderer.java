@@ -36,6 +36,9 @@ public class WorldRenderer
 	private float[] vertices = new float[VERTEX_COUNT];
 	private List<Texture> textures = new ArrayList<>();
 	
+	/**
+	 * Erstellt einen neuten Welten-Renderer
+	 */
 	public WorldRenderer()
 	{
 		init();
@@ -45,6 +48,10 @@ public class WorldRenderer
 		shader.stop();
 	}
 	
+	
+	/**
+	 * Initialisiert den Welt-Renderer
+	 */
 	private void init()
 	{
 		vao = GL30.glGenVertexArrays();
@@ -101,7 +108,13 @@ public class WorldRenderer
 		result.flip();
 		return result;
 	}
-
+	
+	/**
+	 * Bereitet die Welt auf das Zeichnen vor
+	 * 
+	 * @param worldOffsetX - Die Kamera X-Position
+	 * @param worldOffsetY - Die Kamera Y-Position
+	 */
 	public void beginWorld(int worldOffsetX, int worldOffsetY)
 	{
 		vertexCount = 0;
@@ -110,6 +123,9 @@ public class WorldRenderer
 		this.worldOffsetY = worldOffsetY;
 	}
 	
+	/**
+	 * Beendet das Zeichnen der Welt
+	 */
 	public void endWorld()
 	{
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
@@ -120,6 +136,9 @@ public class WorldRenderer
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}
 	
+	/**
+	 * Zeigt die Welt auf dem Bildschirm
+	 */
 	public void showWorld()
 	{
 		shader.start();
@@ -143,6 +162,16 @@ public class WorldRenderer
 		shader.stop();
 	}
 	
+	/**
+	 * Zeichnet einen Block
+	 * 
+	 * @param x - X-Position des Blockes
+	 * @param y - Y-Position des Blockes
+	 * @param width - Breite des Blockes
+	 * @param height - Höhe des Blockes
+	 * @param tileSet - Das TileSet mit welchem der block gezeichnet weird
+	 * @param id - Die ID des Blockes
+	 */
 	public void drawBlock(float x, float y, float width, float height, Tileset tileSet, int id)
 	{
 		int textureWidth = tileSet.getImage().getWidth();
@@ -197,6 +226,11 @@ public class WorldRenderer
 		indexCount += 6;
 	}
 	
+	/**
+	 * Fügt ein TileSet zum Rendern hinzu
+	 * @param tileset - Das TileSet
+	 * @return Die float-id des TileSet
+	 */
 	private float addTileSet(Tileset tileset)
 	{
 		for (int i = 0; i < textures.size(); i++)

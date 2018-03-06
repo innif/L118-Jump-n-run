@@ -9,6 +9,13 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Vector3f;
 
+/**
+ * 
+ * @author james_000
+ *
+ *Ein GUIText erstellt ein zeichenbaren Mesh und Aktualisiert ihn, falls der Text geändert wird.
+ *
+ */
 public class GUIText {
 
 	private String text;
@@ -17,6 +24,7 @@ public class GUIText {
 	
 	private int vao = -1;
 	private int vbo = -1;
+
 	
 	public GUIText(String text)
 	{
@@ -32,6 +40,11 @@ public class GUIText {
 		needUpdate = true;
 	}
 	
+	/**
+	 * 
+	 * @param font - Die Font mit welcher der Text gezeichnet wird
+	 * @return Den Mesh des Textes zum Zeichnen
+	 */
 	public int getVAO(Font font)
 	{
 		if (needUpdate)
@@ -42,11 +55,20 @@ public class GUIText {
 		return vao;
 	}
 	
+	/**
+	 * 
+	 * @return Die Anzahl an Punkten des Meshes
+	 */
 	public int getVertexCount()
 	{
 		return text.length() * 6;
 	}
 	
+	/**
+	 * Aktualisiert den Text-Mesh
+	 * 
+	 * @param font - Die Font mit welcher der Text gezeichnet wird
+	 */
 	private void rebuildMesh(Font font)
 	{
 		if (vao == -1)
@@ -74,12 +96,20 @@ public class GUIText {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @param text - Setzt den Text und Aktualisiert falls sich der Text unterscheidet 
+	 */
 	public void setText(String text) 
 	{
 		needUpdate = !this.text.equalsIgnoreCase(text);
 		this.text = text;
 	}
 	
+	/**
+	 * 
+	 * @return Der Inhalt des Textes
+	 */
 	public String getText()
 	{
 		return text;
@@ -90,6 +120,10 @@ public class GUIText {
 		return text;
 	}
 	
+	/**
+	 * 
+	 * @return Die Farbe des Textes
+	 */
 	public Vector3f getColor()
 	{
 		return color;

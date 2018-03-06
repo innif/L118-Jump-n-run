@@ -14,11 +14,20 @@ public class SpriteShader extends ShaderProgram{
 	public UniformVec2 screenSize = new UniformVec2("screenSize");
 	public UniformSampler sampler = new UniformSampler("sampler");
 	
+	/**
+	 * Erstellt einen Standart Textur-Shader
+	 */
 	public SpriteShader() {
 		super(VERTEX_PATH, FRAGMENT_PATH);
 		storeAllUniformLocation(modelMatrix, screenSize, sampler);
 	}
 	
+	/**
+	 * Erstellt ein neuen Textur Shader
+	 * 
+	 * @param vertPath - Der Pfad zum Vertex-Shader
+	 * @param fragPath - Der Pfad zum Fragment-Shader
+	 */
 	protected SpriteShader(String vertPath, String fragPath) {
 		super(vertPath, fragPath);
 		storeAllUniformLocation(modelMatrix, screenSize, sampler);

@@ -14,12 +14,22 @@ public class ColorShader extends ShaderProgram{
 	public UniformVec2 screenSize = new UniformVec2("screenSize");
 	public UniformVec3 color = new UniformVec3("color");
 	
+	/**
+	 * Erstellt einen Standart Farb-Shader
+	 */
 	public ColorShader() {
 		super(VERTEX_PATH, FRAGMENT_PATH);
 		storeAllUniformLocation(modelMatrix, screenSize, color);
 	}
 	
-	protected ColorShader(String vertPath, String fragPath) {
+	
+	/**
+	 * Erstellt ein neuen Color Shader
+	 * 
+	 * @param vertPath - Der Pfad zum Vertex-Shader
+	 * @param fragPath - Der Pfad zum Fragment-Shader
+	 */
+	public ColorShader(String vertPath, String fragPath) {
 		super(vertPath, fragPath);
 		storeAllUniformLocation(modelMatrix, screenSize, color);
 	}
