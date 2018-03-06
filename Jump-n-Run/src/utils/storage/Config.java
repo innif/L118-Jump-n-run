@@ -21,115 +21,29 @@ import java.util.stream.Collectors;
 
 import static javax.script.ScriptEngine.FILENAME;
 
-
-/*
-
-	@author Stefan
-	@version 1.0
-
+/**
+ * Verarbeitet Datein zu {@link MapStruct}s
+ *
+ * @author Stefan
+ * @version 1.0
+ *
  */
 public class Config {
 	
-	private static final HashMap<String,StorageObject> RAM = new HashMap<>();
-	
-	/*
-		Loads {@link StorageObject}'s of specified files into RAM which increases speed but junks the RAM at high amount
-
-		@param  file            the file that should be converted to the StorageObject
-		@return StorageObject  the StorageObject that was loaded from the file
-	*/
-	public static StorageObject loadInRAM(File file) {
-		
-		String path = file.getAbsolutePath();
-		
-		if(RAM.containsKey(path)) {
-			return RAM.get(path);
-		}
-		
-		StorageObject object = get(file);
-		
-		RAM.put(path,object);
-		
-		return object;
-	}
-	
-	/*
-		Removes a {@link StorageObject}'s from the RAM and stores it into the file
-
-		@param  file            the file that should be removed from the ram
-		@return int		        1 if the operation was successful
-								-1 if the file is not loaded in RAM
-	*/
-	public static int removeFromRAM(File file){
-		
-		String path = file.getAbsolutePath();
-		
-		if(!RAM.containsKey(path)) {
-			return -1;
-		}
-		RAM.remove(path);
-		return 1;
-	}
-	
-	/*
-
-		Since objects in RAM don't update it is necessary to save them (at least on shutdown)
-
-	 */
-	public static void saveRAMObjects(){
-		for(String path : RAM.keySet()) {
-			File file = new File(path);
-			
-		}
-	}
-	
-	/*
-		Loades the {@link StorageObject} from the file (or RAM) and returns it
-
-		@param  file            the file that should be converted
-		@return StorageObject  the StorageObject that should be returned
-	 */
-	public static StorageObject get(File file){
-		
-		String path = file.getAbsolutePath();
-		
-		if(RAM.containsKey(path)) {
-			return RAM.get(path);
-		}
-		
-		String json = readFileAsString(file).replace("\n","");
-		StorageObject out = new StorageObject(json);
-		return out;
-	}
-	
-	/*
-		Loades the {@link StorageObject} from the file (or RAM) and returns it
-
-		@param  file            the file that should be converted
-		@return StorageObject  the StorageObject that should be returned
-	 */
-	public static void set(File file, StorageObject storageObject){
-		JSONObject object = new JSONObject(storageObject);
-		
-		writeFile(file,object);
-		
-		
-	}
-	
-	/*
-	
-	Gibt ein {@link MapStruct} zurück, welches die Informationen über Blöcke, Collisionen und die Tilesets enthält
-	
-	@param  file		Datei, die zu einem MapStruct formatiert werden soll
-	@return MapStruct 	Karte die ausgelesen wurde.
-	
+	/**
+	 * Gibt ein {@link MapStruct} zurück, welches die Informationen über Blöcke, Collisionen und die Tilesets enthält
+	 *
+	 * @param  file
+	 * 		Datei, die zu einem MapStruct formatiert werden soll
+	 * @return
+	 * 		Karte die ausgelesen wurde.
 	 */
 	public static MapStruct getMap(File file) {
 	
 		String map_json = readFileAsString(file);
 		
 		JSONObject map = new JSONObject(map_json);
-		List<Object> layers = map.getJSONArray("layers").toList().stream().filter(layer -> ((String)((HashMap<String,Object>)layer).get("type")).equalsIgnoreCase("tilelayer")).collect(Collectors.toList());
+		List<Object> layers = map.getJSONArray("layers").toList().stream().filter(layer -> ((String)((HashMap<String,Object>)layer).get("type")).equalsIgnoreCase("tilelayer") && (boolean)((HashMap<String,Object>)layer).get("visible")).collect(Collectors.toList());
 		JSONArray tilesets = map.getJSONArray("tilesets");
 		
 		final Blocks[][][] out;
@@ -189,6 +103,16 @@ public class Config {
 		
 	}
 	
+	/**
+	 * Gibt anhand der Mapdatei und einem Array aus Tileset Blöcken die Tilesets als {@link Tileset} zurück.
+	 *
+	 * @param mapfile
+	 * 		Datei, die die Daten der Karte enthält
+	 * @param tilesets
+	 * 		{@link JSONArray}, dass die Information zu allen Tilesets der Karte enthält
+	 * @return
+	 * 		Liste aus {@link Tileset}
+	 */
 	private static ArrayList<Tileset> getTilesets(File mapfile,JSONArray tilesets) {
 		
 		final ArrayList<Tileset> out = new ArrayList<>();
@@ -215,8 +139,19 @@ public class Config {
 		return out;
 	}
 	
+	/**
+	 * RegEx pattern, das benutzt wird um aus den Rohdaten des Tilesetfiles die entsprechenden Informationen abzuleiten.
+	 */
 	private final static Pattern PATTERN_TILESET = Pattern.compile("<.+?>\\n<tileset .+?tilecount=\"(\\d+)\" columns=\"(\\d+)\">(?:\\n .*?)+?<image source=\"(.+?)\".+?>(?:\\n .*?)*\\n<\\/tileset>");
 	
+	/**
+	 * Gibt wichtige Informationen eines Teilsets zurück (Breite, anzahl an Texturen, Pfad zum Bild)
+	 *
+	 * @param file
+	 * 		Datei des Teilsets
+	 * @return
+	 * 		Gibt ein {@link Entry} zurück, wobei der Key die Breite und Anzahl von Texturen speichert und die Value gleich dem Dateipfad zum Texturenatlas ist.
+	 */
 	private static Entry<Entry<Integer,Integer>,String> getPathFromTileset(File file) {
 		String path = "";
 		
@@ -237,54 +172,20 @@ public class Config {
 		path = file.getParent() + "/" + path;
 		
 		Entry<Entry<Integer,Integer>,String> output = new Entry<>();
-		output.setValue(path);
 		output.setKey(new Entry<>(columns,tilecount));
+		output.setValue(path);
 		return output;
 	}
 	
-	private static BufferedImage getImage(File file) {
-		BufferedImage img;
-		try {
-			return ImageIO.read(file);
-		} catch (IOException e) {
-			return null;
-		}
-	}
-	
-	private static List<String> readFileAsList(File file) {
-		if(!file.exists())
-			return null;
-		
-		if(!file.isFile())
-			return null;
-		
-		ArrayList<String> out = new ArrayList<>();
-		
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-			
-			String sCurrentLine;
-			
-			while ((sCurrentLine = br.readLine()) != null) {
-				out.add(sCurrentLine);
-			}
-			
-		} catch (IOException e) {
-			return null;
-		}
-		
-		return out;
-		
-	}
-	
-	/*
-	
-	Gibt den Inhalt einer Datei als String zurück.
-	Jede Linie ist mit einem \n abgeteilt.
-	
-	@param  file	Datei die ausgelesen werden soll
-	@return String 	Inhalt der Datei
-	
-	*/
+	/**
+	 *
+	 * Gibt den Inhalt einer Datei als String zurück.
+	 * Jede Zeile ist mit einem \n abgeteilt.
+	 *
+	 * @param file
+	 * 		Datei, die ausgelesen werden soll.
+	 * @return Inhalt der Datei
+	 */
 	public static String readFileAsString(File file) {
 		if(!file.exists())
 			return null;
@@ -309,26 +210,5 @@ public class Config {
 		return output.substring(0,output.length() - "\n".length());
 		
 	}
-	
-	private static void writeFile(File file,JSONObject jsonObject) {
-		
-		if(!file.exists())
-			return;
-		
-		if(!file.isFile())
-			return;
-		
-		
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-			
-			String content = jsonObject.toString();
-			
-			bw.write(content);
-			
-		} catch (IOException e) {
-		
-		}
-	}
-	
 	
 }

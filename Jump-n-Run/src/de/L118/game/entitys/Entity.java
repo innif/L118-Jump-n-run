@@ -105,14 +105,12 @@ public abstract class Entity {
 	
 	public void updateEntity() {
 		
-		System.out.println("does sth else");
 		if(isDead)
 			return;
 		
 		if(getY()+getHeight() < 0) {
 			isDead = true;
 			kill();
-			System.out.println("dead");
 		}
 		
 		update();

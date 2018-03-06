@@ -45,7 +45,15 @@ public class Player extends Entity{
 		
 		PolygonShape shape = new PolygonShape();
 		float width = 0.3f;
-		Vec2[] points = {new Vec2(width/2,-0.5f),new Vec2(-width/2,-0.5f),new Vec2(-width,-0.2f),new Vec2(-width,0.2f),new Vec2(width/2,0.5f),new Vec2(-width/2,0.5f),new Vec2(width,0.2f),new Vec2(width,-0.2f)};
+		Vec2[] points = {
+				new Vec2(width/2,-0.5f),
+				new Vec2(-width/2,-0.5f),
+				new Vec2(-width,-0.2f),
+				new Vec2(-width,0.2f),
+				new Vec2(width/2,0.45f),
+				new Vec2(-width/2,0.45f),
+				new Vec2(width,0.2f),
+				new Vec2(width,-0.2f)};
 		scale(points);
 		shape.set(points, points.length);
 		
@@ -87,6 +95,7 @@ public class Player extends Entity{
 		
 		float xScreen = ((getX() + (Display.getWidth() / 2.0f / World.TILESIZE)) * World.TILESIZE) - w.xPos;
 		float yScreen = ((getY() + (Display.getHeight() / 2.0f / World.TILESIZE)) * World.TILESIZE) - w.yPos;
+		
 		float mx = getWorldAdvanceMultiplier(xScreen);
 		float my = getWorldAdvanceMultiplier(yScreen);
 		
@@ -113,7 +122,7 @@ public class Player extends Entity{
 	
 	public float getWorldAdvanceMultiplier(float x)
 	{
-		return (1.0f / 200.0f) * x * x;
+		return (200.0f / 1.0f) * x * x;
 	}
 	
 	/*
